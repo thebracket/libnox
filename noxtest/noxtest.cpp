@@ -50,6 +50,18 @@ int main() {
 	nf::water_cubes(n_water, water_ptr);
 	std::cout << "There are " << n_water << " wet tiles.\n";
 
+	std::cout << "Running a paused tick\n";
+	nf::set_pause_mode(1);
+	nf::on_tick(20.0);
+
+	std::cout << "Running a single step tick\n";
+	nf::set_pause_mode(2);
+	nf::on_tick(20.0);
+
+	std::cout << "Running a free tick\n";
+	nf::set_pause_mode(0);
+	nf::on_tick(20.0);
+
 	std::cout << "Press ENTER to close\n";
 	std::cin.ignore();
 }

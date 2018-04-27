@@ -327,7 +327,7 @@ namespace systems {
 			cp->active = all_set;
 			const auto sender = circuit_entity->component<sends_signal_t>();
 			sender->active = cp->active;
-			std::cout << "AND gate state: " << sender->active << "\n";
+			//std::cout << "AND gate state: " << sender->active << "\n";
 			nodes_changed.insert(circuit_entity->id);
 		}
 
@@ -534,7 +534,7 @@ namespace systems {
 			while (!nodes_changed.empty())
 			{
 				const auto id = *nodes_changed.begin();
-				std::cout << id << "\n";
+				//std::cout << id << "\n";
 				nodes_changed.erase(id);
 
 				const auto effect_finder = affects.find(id);

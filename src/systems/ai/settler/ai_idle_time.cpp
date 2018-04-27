@@ -63,7 +63,8 @@ namespace systems {
 				}
 			}
 
-			const auto feelings = planet.civs.civs[sentient.civ_id].cordex_feelings;
+			//const auto feelings = planet.civs.civs[sentient.civ_id].cordex_feelings;
+			const auto feelings = 0;
 
 			if (sentient.hostile || feelings < 0) {
 				sentient.goal = SENTIENT_GOAL_KILL;
