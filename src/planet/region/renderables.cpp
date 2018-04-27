@@ -218,7 +218,7 @@ namespace render {
 				models.emplace_back(nf::dynamic_model_t{ 
 					m.first,
 					n.entity_id,
-					n.x, n.y, n.z, n.axis1, n.axis2, n.axis3, n.rot_angle,
+					n.x, n.y, n.z, n.axis1, n.axis2, n.axis3, n.rot_angle - 90.0f,
 					n.tint_r, n.tint_g, n.tint_b
 					});
 			}
