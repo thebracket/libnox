@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{B4B072AE-656E-4F7E-BD17-CD52FB651507}</ProjectGuid>
+    <RootNamespace>libnox</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <VcpkgTriplet Condition="'$(Platform)'=='Win32'">x86-windows-static</VcpkgTriplet>
+    <VcpkgTriplet Condition="'$(Platform)'=='x64'">x64-windows-static</VcpkgTriplet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;FMT_HEADER_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>C:\Users\Herbert\Development\github\libnox\deploy.bat</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>C:\Users\Herbert\Development\github\libnox\deploy.bat</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\bengine\bitset.hpp" />
+    <ClInclude Include="..\src\bengine\color_t.hpp" />
+    <ClInclude Include="..\src\bengine\ecs.hpp" />
+    <ClInclude Include="..\src\bengine\ecs_helper.hpp" />
+    <ClInclude Include="..\src\bengine\FastNoise.h" />
+    <ClInclude Include="..\src\bengine\filesystem.hpp" />
+    <ClInclude Include="..\src\bengine\geometry.hpp" />
+    <ClInclude Include="..\src\bengine\octree.hpp" />
+    <ClInclude Include="..\src\bengine\pcg_basic.h" />
+    <ClInclude Include="..\src\bengine\random_number_generator.hpp" />
+    <ClInclude Include="..\src\bengine\rexspeeder.hpp" />
+    <ClInclude Include="..\src\bengine\serialization_utils.hpp" />
+    <ClInclude Include="..\src\bengine\string_utils.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_mode_idle.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_settler_new_arrival.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_leisure_drink.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_leisure_eat.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_leisure_shift.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_my_turn.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_sleep_shift.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_architect.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_building.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_butcher.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_deconstruct.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\aI_tag_work_farm_clear.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\aI_tag_work_farm_fertilize.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\aI_tag_work_farm_fixsoil.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_farm_plant.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_farm_water.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_farm_weed.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_guarding.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_harvest.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_hunting.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_lumberjack.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_mining.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_order.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_pull_lever.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_shift.hpp" />
+    <ClInclude Include="..\src\components\ai_tags\ai_tag_work_stockpiles.hpp" />
+    <ClInclude Include="..\src\components\all_components.hpp" />
+    <ClInclude Include="..\src\components\buildings\architecture_designations_t.hpp" />
+    <ClInclude Include="..\src\components\buildings\bridge.hpp" />
+    <ClInclude Include="..\src\components\buildings\building.hpp" />
+    <ClInclude Include="..\src\components\buildings\building_designations_t.hpp" />
+    <ClInclude Include="..\src\components\buildings\construct_container.hpp" />
+    <ClInclude Include="..\src\components\buildings\construct_power.hpp" />
+    <ClInclude Include="..\src\components\buildings\construct_provides_door.hpp" />
+    <ClInclude Include="..\src\components\buildings\construct_provides_sleep.hpp" />
+    <ClInclude Include="..\src\components\buildings\construct_provides_support.hpp" />
+    <ClInclude Include="..\src\components\buildings\smoke_emitter.hpp" />
+    <ClInclude Include="..\src\components\buildings\turret_t.hpp" />
+    <ClInclude Include="..\src\components\calendar.hpp" />
+    <ClInclude Include="..\src\components\camera_options.hpp" />
+    <ClInclude Include="..\src\components\claimed_t.hpp" />
+    <ClInclude Include="..\src\components\corpse_harvestable.hpp" />
+    <ClInclude Include="..\src\components\corpse_settler.hpp" />
+    <ClInclude Include="..\src\components\designated_lumberjack.hpp" />
+    <ClInclude Include="..\src\components\designations.hpp" />
+    <ClInclude Include="..\src\components\explosion_t.hpp" />
+    <ClInclude Include="..\src\components\falling.hpp" />
+    <ClInclude Include="..\src\components\farming\designated_farmer.hpp" />
+    <ClInclude Include="..\src\components\farming\designated_hunter.hpp" />
+    <ClInclude Include="..\src\components\farming\farm_designs.hpp" />
+    <ClInclude Include="..\src\components\flying_t.hpp" />
+    <ClInclude Include="..\src\components\game_stats.hpp" />
+    <ClInclude Include="..\src\components\grazer_ai.hpp" />
+    <ClInclude Include="..\src\components\health.hpp" />
+    <ClInclude Include="..\src\components\helpers\building_designation_t.hpp" />
+    <ClInclude Include="..\src\components\helpers\health_part_t.hpp" />
+    <ClInclude Include="..\src\components\helpers\reaction_task_t.hpp" />
+    <ClInclude Include="..\src\components\helpers\shift.hpp" />
+    <ClInclude Include="..\src\components\helpers\skill_t.hpp" />
+    <ClInclude Include="..\src\components\helpers\standing_orders.hpp" />
+    <ClInclude Include="..\src\components\helpers\unbuild_t.hpp" />
+    <ClInclude Include="..\src\components\hunger_t.hpp" />
+    <ClInclude Include="..\src\components\initiative.hpp" />
+    <ClInclude Include="..\src\components\items\item.hpp" />
+    <ClInclude Include="..\src\components\items\item_carried.hpp" />
+    <ClInclude Include="..\src\components\items\item_creator.hpp" />
+    <ClInclude Include="..\src\components\items\item_quality.hpp" />
+    <ClInclude Include="..\src\components\items\item_stored.hpp" />
+    <ClInclude Include="..\src\components\items\item_wear.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_ammo_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_bone_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_chopping_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_digging_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_drink_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_farming.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_fertilizer_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_food_prepared_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_food_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_hide_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_leather_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_melee_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_ranged_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_seed_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_skull_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_spice_t.hpp" />
+    <ClInclude Include="..\src\components\item_tags\item_topsoil_t.hpp" />
+    <ClInclude Include="..\src\components\lightsource.hpp" />
+    <ClInclude Include="..\src\components\logger.hpp" />
+    <ClInclude Include="..\src\components\machinery\entry_trigger.hpp" />
+    <ClInclude Include="..\src\components\machinery\float_gauge_t.hpp" />
+    <ClInclude Include="..\src\components\machinery\lever.hpp" />
+    <ClInclude Include="..\src\components\machinery\node_graph_position.hpp" />
+    <ClInclude Include="..\src\components\machinery\oscillator_t.hpp" />
+    <ClInclude Include="..\src\components\machinery\pressure_plate_t.hpp" />
+    <ClInclude Include="..\src\components\machinery\proximity_sensor_t.hpp" />
+    <ClInclude Include="..\src\components\machinery\receives_signal.hpp" />
+    <ClInclude Include="..\src\components\machinery\sends_signal_t.hpp" />
+    <ClInclude Include="..\src\components\machinery\signal_processor_t.hpp" />
+    <ClInclude Include="..\src\components\mining\designated_miner.hpp" />
+    <ClInclude Include="..\src\components\mining\mining_designations.hpp" />
+    <ClInclude Include="..\src\components\name.hpp" />
+    <ClInclude Include="..\src\components\natural_attacks_t.hpp" />
+    <ClInclude Include="..\src\components\position.hpp" />
+    <ClInclude Include="..\src\components\renderable.hpp" />
+    <ClInclude Include="..\src\components\renderable_composite.hpp" />
+    <ClInclude Include="..\src\components\riding_t.hpp" />
+    <ClInclude Include="..\src\components\sentient_ai.hpp" />
+    <ClInclude Include="..\src\components\settler_ai.hpp" />
+    <ClInclude Include="..\src\components\sleep_clock_t.hpp" />
+    <ClInclude Include="..\src\components\slidemove.hpp" />
+    <ClInclude Include="..\src\components\species.hpp" />
+    <ClInclude Include="..\src\components\stockpile.hpp" />
+    <ClInclude Include="..\src\components\thirst_t.hpp" />
+    <ClInclude Include="..\src\components\viewshed.hpp" />
+    <ClInclude Include="..\src\components\water_spawner.hpp" />
+    <ClInclude Include="..\src\components\wildlife_group.hpp" />
+    <ClInclude Include="..\src\components\world_position.hpp" />
+    <ClInclude Include="..\src\global_assets\architecture_designations.hpp" />
+    <ClInclude Include="..\src\global_assets\building_designations.hpp" />
+    <ClInclude Include="..\src\global_assets\farming_designations.hpp" />
+    <ClInclude Include="..\src\global_assets\game_building.hpp" />
+    <ClInclude Include="..\src\global_assets\game_calendar.hpp" />
+    <ClInclude Include="..\src\global_assets\game_camera.hpp" />
+    <ClInclude Include="..\src\global_assets\game_config.hpp" />
+    <ClInclude Include="..\src\global_assets\game_designations.hpp" />
+    <ClInclude Include="..\src\global_assets\game_ecs.hpp" />
+    <ClInclude Include="..\src\global_assets\game_mining.hpp" />
+    <ClInclude Include="..\src\global_assets\game_mode.hpp" />
+    <ClInclude Include="..\src\global_assets\game_pause.hpp" />
+    <ClInclude Include="..\src\global_assets\game_planet.hpp" />
+    <ClInclude Include="..\src\global_assets\rng.hpp" />
+    <ClInclude Include="..\src\global_assets\spatial_db.hpp" />
+    <ClInclude Include="..\src\libnox.h" />
+    <ClInclude Include="..\src\noxtypes.h" />
+    <ClInclude Include="..\src\planet\builder\biome_builder.hpp" />
+    <ClInclude Include="..\src\planet\builder\history_builder.hpp" />
+    <ClInclude Include="..\src\planet\builder\map_builder.hpp" />
+    <ClInclude Include="..\src\planet\builder\noise_helper.hpp" />
+    <ClInclude Include="..\src\planet\builder\regions\blight_builder.hpp" />
+    <ClInclude Include="..\src\planet\builder\regions\buildings.hpp" />
+    <ClInclude Include="..\src\planet\builder\regions\decorators.hpp" />
+    <ClInclude Include="..\src\planet\builder\regions\game_objects.hpp" />
+    <ClInclude Include="..\src\planet\builder\regions\heightmap.hpp" />
+    <ClInclude Include="..\src\planet\builder\regions\starting_point.hpp" />
+    <ClInclude Include="..\src\planet\builder\regions\strata.hpp" />
+    <ClInclude Include="..\src\planet\builder\regions\trees.hpp" />
+    <ClInclude Include="..\src\planet\builder\regions\water_features.hpp" />
+    <ClInclude Include="..\src\planet\builder\region_builder.hpp" />
+    <ClInclude Include="..\src\planet\builder\river_builder.hpp" />
+    <ClInclude Include="..\src\planet\builder\sentient_builder.hpp" />
+    <ClInclude Include="..\src\planet\builder\settler_builder.hpp" />
+    <ClInclude Include="..\src\planet\civilizations.hpp" />
+    <ClInclude Include="..\src\planet\constants.hpp" />
+    <ClInclude Include="..\src\planet\history.hpp" />
+    <ClInclude Include="..\src\planet\indices.hpp" />
+    <ClInclude Include="..\src\planet\planet.hpp" />
+    <ClInclude Include="..\src\planet\planet_builder.hpp" />
+    <ClInclude Include="..\src\planet\region\lighting.hpp" />
+    <ClInclude Include="..\src\planet\region\region.hpp" />
+    <ClInclude Include="..\src\planet\region\region_chunking.hpp" />
+    <ClInclude Include="..\src\planet\region\renderables.hpp" />
+    <ClInclude Include="..\src\raws\apihelper.hpp" />
+    <ClInclude Include="..\src\raws\biomes.hpp" />
+    <ClInclude Include="..\src\raws\buildings.hpp" />
+    <ClInclude Include="..\src\raws\clothing.hpp" />
+    <ClInclude Include="..\src\raws\creatures.hpp" />
+    <ClInclude Include="..\src\raws\defs\biome_type_t.hpp" />
+    <ClInclude Include="..\src\raws\defs\building_def_t.hpp" />
+    <ClInclude Include="..\src\raws\defs\civilization_t.hpp" />
+    <ClInclude Include="..\src\raws\defs\clothing_t.hpp" />
+    <ClInclude Include="..\src\raws\defs\item_def_t.hpp" />
+    <ClInclude Include="..\src\raws\defs\life_event_template.hpp" />
+    <ClInclude Include="..\src\raws\defs\material_def_t.hpp" />
+    <ClInclude Include="..\src\raws\defs\plant_t.hpp" />
+    <ClInclude Include="..\src\raws\defs\profession_t.hpp" />
+    <ClInclude Include="..\src\raws\defs\raw_creature_t.hpp" />
+    <ClInclude Include="..\src\raws\defs\reaction_t.hpp" />
+    <ClInclude Include="..\src\raws\graphviz.hpp" />
+    <ClInclude Include="..\src\raws\health_factory.hpp" />
+    <ClInclude Include="..\src\raws\items.hpp" />
+    <ClInclude Include="..\src\raws\life_events.hpp" />
+    <ClInclude Include="..\src\raws\lua_bridge.hpp" />
+    <ClInclude Include="..\src\raws\materials.hpp" />
+    <ClInclude Include="..\src\raws\plants.hpp" />
+    <ClInclude Include="..\src\raws\profession.hpp" />
+    <ClInclude Include="..\src\raws\raws.hpp" />
+    <ClInclude Include="..\src\raws\reactions.hpp" />
+    <ClInclude Include="..\src\raws\reaction_input.hpp" />
+    <ClInclude Include="..\src\raws\species.hpp" />
+    <ClInclude Include="..\src\raws\string_table.hpp" />
+    <ClInclude Include="..\src\systems\ai\ai_status_effects.hpp" />
+    <ClInclude Include="..\src\systems\ai\ai_stuck.hpp" />
+    <ClInclude Include="..\src\systems\ai\architecture_system.hpp" />
+    <ClInclude Include="..\src\systems\ai\distance_map_system.hpp" />
+    <ClInclude Include="..\src\systems\ai\inventory_system.hpp" />
+    <ClInclude Include="..\src\systems\ai\mining_system.hpp" />
+    <ClInclude Include="..\src\systems\ai\sentient_ai_system.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_deconstruct.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_idle_time.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_leisure_drink.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_leisure_eat.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_leisure_time.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_new_arrival.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_scheduler.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_sleep_time.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_visibility_scan.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_architect.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_building.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_butcher.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_farm_clear.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_farm_fertilize.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_farm_fixsoil.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_farm_plant.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_farm_water.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_farm_weed.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_guard.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_harvest.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_hunt.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_lever_pull.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_lumberjack.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_mining.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_order.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_stockpile.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_template.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\ai_work_time.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\jobs_board.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\templated_idle_steps_t.hpp" />
+    <ClInclude Include="..\src\systems\ai\settler\templated_work_steps_t.hpp" />
+    <ClInclude Include="..\src\systems\ai\stockpile_system.hpp" />
+    <ClInclude Include="..\src\systems\ai\wildlife_population.hpp" />
+    <ClInclude Include="..\src\systems\ai\workflow_system.hpp" />
+    <ClInclude Include="..\src\systems\damage\creature_attacks_system.hpp" />
+    <ClInclude Include="..\src\systems\damage\damage_system.hpp" />
+    <ClInclude Include="..\src\systems\damage\healing_system.hpp" />
+    <ClInclude Include="..\src\systems\damage\kill_system.hpp" />
+    <ClInclude Include="..\src\systems\damage\sentient_attacks_system.hpp" />
+    <ClInclude Include="..\src\systems\damage\settler_melee_attacks_system.hpp" />
+    <ClInclude Include="..\src\systems\damage\settler_ranged_attack_system.hpp" />
+    <ClInclude Include="..\src\systems\damage\turret_ranged_attack_system.hpp" />
+    <ClInclude Include="..\src\systems\helpers\dijkstra_map.hpp" />
+    <ClInclude Include="..\src\systems\helpers\inventory_assistant.hpp" />
+    <ClInclude Include="..\src\systems\helpers\pathfinding.hpp" />
+    <ClInclude Include="..\src\systems\helpers\targeted_flow_map.hpp" />
+    <ClInclude Include="..\src\systems\helpers\weapons_helper.hpp" />
+    <ClInclude Include="..\src\systems\helpers\workflow_assistant.hpp" />
+    <ClInclude Include="..\src\systems\overworld\settler_spawner_system.hpp" />
+    <ClInclude Include="..\src\systems\overworld\world_system.hpp" />
+    <ClInclude Include="..\src\systems\physics\door_system.hpp" />
+    <ClInclude Include="..\src\systems\physics\explosive_system.hpp" />
+    <ClInclude Include="..\src\systems\physics\gravity_system.hpp" />
+    <ClInclude Include="..\src\systems\physics\item_wear_system.hpp" />
+    <ClInclude Include="..\src\systems\physics\movement_system.hpp" />
+    <ClInclude Include="..\src\systems\physics\topology_system.hpp" />
+    <ClInclude Include="..\src\systems\physics\trigger_system.hpp" />
+    <ClInclude Include="..\src\systems\physics\vegetation_system.hpp" />
+    <ClInclude Include="..\src\systems\physics\visibility_system.hpp" />
+    <ClInclude Include="..\src\systems\power\power_system.hpp" />
+    <ClInclude Include="..\src\systems\run_systems.hpp" />
+    <ClInclude Include="..\src\systems\scheduler\calendar_system.hpp" />
+    <ClInclude Include="..\src\systems\scheduler\corpse_system.hpp" />
+    <ClInclude Include="..\src\systems\scheduler\hunger_system.hpp" />
+    <ClInclude Include="..\src\systems\scheduler\initiative_system.hpp" />
+    <ClInclude Include="..\src\systems\scheduler\tick_system.hpp" />
+    <ClInclude Include="..\src\utils\core.h" />
+    <ClInclude Include="..\src\utils\format-inl.h" />
+    <ClInclude Include="..\src\utils\format.h" />
+    <ClInclude Include="..\src\utils\ostream.h" />
+    <ClInclude Include="..\src\utils\system_log.hpp" />
+    <ClInclude Include="..\src\utils\thread_safe_message_queue.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\bengine\FastNoise.cpp" />
+    <ClCompile Include="..\src\bengine\filesystem.cpp" />
+    <ClCompile Include="..\src\bengine\geometry.cpp" />
+    <ClCompile Include="..\src\bengine\octree.cpp" />
+    <ClCompile Include="..\src\bengine\pcg_basic.cpp" />
+    <ClCompile Include="..\src\bengine\random_number_generator.cpp" />
+    <ClCompile Include="..\src\bengine\rexspeeder.cpp" />
+    <ClCompile Include="..\src\bengine\string_utils.cpp" />
+    <ClCompile Include="..\src\components\calendar.cpp" />
+    <ClCompile Include="..\src\components\game_stats.cpp" />
+    <ClCompile Include="..\src\components\items\item.cpp" />
+    <ClCompile Include="..\src\components\logger.cpp" />
+    <ClCompile Include="..\src\components\species.cpp" />
+    <ClCompile Include="..\src\global_assets\architecture_designations.cpp" />
+    <ClCompile Include="..\src\global_assets\building_designations.cpp" />
+    <ClCompile Include="..\src\global_assets\farming_designations.cpp" />
+    <ClCompile Include="..\src\global_assets\game_building.cpp" />
+    <ClCompile Include="..\src\global_assets\game_calendar.cpp" />
+    <ClCompile Include="..\src\global_assets\game_camera.cpp" />
+    <ClCompile Include="..\src\global_assets\game_config.cpp" />
+    <ClCompile Include="..\src\global_assets\game_designations.cpp" />
+    <ClCompile Include="..\src\global_assets\game_ecs.cpp" />
+    <ClCompile Include="..\src\global_assets\game_mining.cpp" />
+    <ClCompile Include="..\src\global_assets\game_mode.cpp" />
+    <ClCompile Include="..\src\global_assets\game_pause.cpp" />
+    <ClCompile Include="..\src\global_assets\game_planet.cpp" />
+    <ClCompile Include="..\src\global_assets\rng.cpp" />
+    <ClCompile Include="..\src\global_assets\spatial_db.cpp" />
+    <ClCompile Include="..\src\libnox.cpp" />
+    <ClCompile Include="..\src\planet\builder\biome_builder.cpp" />
+    <ClCompile Include="..\src\planet\builder\history_builder.cpp" />
+    <ClCompile Include="..\src\planet\builder\map_builder.cpp" />
+    <ClCompile Include="..\src\planet\builder\regions\blight_builder.cpp" />
+    <ClCompile Include="..\src\planet\builder\regions\buildings.cpp" />
+    <ClCompile Include="..\src\planet\builder\regions\decorators.cpp" />
+    <ClCompile Include="..\src\planet\builder\regions\game_objects.cpp" />
+    <ClCompile Include="..\src\planet\builder\regions\heightmap.cpp" />
+    <ClCompile Include="..\src\planet\builder\regions\starting_point.cpp" />
+    <ClCompile Include="..\src\planet\builder\regions\strata.cpp" />
+    <ClCompile Include="..\src\planet\builder\regions\trees.cpp" />
+    <ClCompile Include="..\src\planet\builder\regions\water_features.cpp" />
+    <ClCompile Include="..\src\planet\builder\region_builder.cpp" />
+    <ClCompile Include="..\src\planet\builder\river_builder.cpp" />
+    <ClCompile Include="..\src\planet\builder\sentient_builder.cpp" />
+    <ClCompile Include="..\src\planet\builder\settler_builder.cpp" />
+    <ClCompile Include="..\src\planet\planet.cpp" />
+    <ClCompile Include="..\src\planet\planet_builder.cpp" />
+    <ClCompile Include="..\src\planet\region\lighting.cpp" />
+    <ClCompile Include="..\src\planet\region\region.cpp" />
+    <ClCompile Include="..\src\planet\region\region_chunking.cpp" />
+    <ClCompile Include="..\src\planet\region\renderables.cpp" />
+    <ClCompile Include="..\src\raws\biomes.cpp" />
+    <ClCompile Include="..\src\raws\buildings_raw.cpp" />
+    <ClCompile Include="..\src\raws\clothing.cpp" />
+    <ClCompile Include="..\src\raws\creatures.cpp" />
+    <ClCompile Include="..\src\raws\health_factory.cpp" />
+    <ClCompile Include="..\src\raws\items.cpp" />
+    <ClCompile Include="..\src\raws\life_events.cpp" />
+    <ClCompile Include="..\src\raws\lua_bridge.cpp" />
+    <ClCompile Include="..\src\raws\materials.cpp" />
+    <ClCompile Include="..\src\raws\plants.cpp" />
+    <ClCompile Include="..\src\raws\profession.cpp" />
+    <ClCompile Include="..\src\raws\raws.cpp" />
+    <ClCompile Include="..\src\raws\reactions.cpp" />
+    <ClCompile Include="..\src\raws\species_raw.cpp" />
+    <ClCompile Include="..\src\raws\string_table.cpp" />
+    <ClCompile Include="..\src\systems\ai\ai_status_effects.cpp" />
+    <ClCompile Include="..\src\systems\ai\ai_stuck.cpp" />
+    <ClCompile Include="..\src\systems\ai\architecture_system.cpp" />
+    <ClCompile Include="..\src\systems\ai\distance_map_system.cpp" />
+    <ClCompile Include="..\src\systems\ai\inventory_system.cpp" />
+    <ClCompile Include="..\src\systems\ai\mining_system.cpp" />
+    <ClCompile Include="..\src\systems\ai\sentient_ai_system.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_deconstruct.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_idle_time.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_leisure_drink.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_leisure_eat.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_leisure_time.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_new_arrival.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_scheduler.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_sleep_time.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_visibility_scan.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_architect.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_building.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_butcher.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_farm_clear.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_farm_fertilize.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_farm_fixsoil.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_farm_plant.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_farm_water.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_farm_weed.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_guard.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_harvest.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_hunt.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_lever_pull.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_lumberjack.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_mining.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_order.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_stockpile.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\ai_work_time.cpp" />
+    <ClCompile Include="..\src\systems\ai\settler\jobs_board.cpp" />
+    <ClCompile Include="..\src\systems\ai\stockpile_system.cpp" />
+    <ClCompile Include="..\src\systems\ai\wildlife_population.cpp" />
+    <ClCompile Include="..\src\systems\ai\workflow_system.cpp" />
+    <ClCompile Include="..\src\systems\damage\creature_attacks_system.cpp" />
+    <ClCompile Include="..\src\systems\damage\damage_system.cpp" />
+    <ClCompile Include="..\src\systems\damage\healing_system.cpp" />
+    <ClCompile Include="..\src\systems\damage\kill_system.cpp" />
+    <ClCompile Include="..\src\systems\damage\sentient_attacks_system.cpp" />
+    <ClCompile Include="..\src\systems\damage\settler_melee_attacks_system.cpp" />
+    <ClCompile Include="..\src\systems\damage\settler_ranged_attack_system.cpp" />
+    <ClCompile Include="..\src\systems\damage\turret_ranged_attack_system.cpp" />
+    <ClCompile Include="..\src\systems\helpers\dijkstra_map.cpp" />
+    <ClCompile Include="..\src\systems\helpers\inventory_assistant.cpp" />
+    <ClCompile Include="..\src\systems\helpers\pathfinding.cpp" />
+    <ClCompile Include="..\src\systems\helpers\weapons_helper.cpp" />
+    <ClCompile Include="..\src\systems\helpers\workflow_assistant.cpp" />
+    <ClCompile Include="..\src\systems\overworld\settler_spawner_system.cpp" />
+    <ClCompile Include="..\src\systems\overworld\world_system.cpp" />
+    <ClCompile Include="..\src\systems\physics\door_system.cpp" />
+    <ClCompile Include="..\src\systems\physics\explosive_system.cpp" />
+    <ClCompile Include="..\src\systems\physics\gravity_system.cpp" />
+    <ClCompile Include="..\src\systems\physics\item_wear_system.cpp" />
+    <ClCompile Include="..\src\systems\physics\movement_system.cpp" />
+    <ClCompile Include="..\src\systems\physics\topology_system.cpp" />
+    <ClCompile Include="..\src\systems\physics\trigger_system.cpp" />
+    <ClCompile Include="..\src\systems\physics\vegetation_system.cpp" />
+    <ClCompile Include="..\src\systems\physics\visibility_system.cpp" />
+    <ClCompile Include="..\src\systems\power\power_system.cpp" />
+    <ClCompile Include="..\src\systems\run_systems.cpp" />
+    <ClCompile Include="..\src\systems\scheduler\calendar_system.cpp" />
+    <ClCompile Include="..\src\systems\scheduler\corpse_system.cpp" />
+    <ClCompile Include="..\src\systems\scheduler\hunger_system.cpp" />
+    <ClCompile Include="..\src\systems\scheduler\initiative_system.cpp" />
+    <ClCompile Include="..\src\systems\scheduler\tick_system.cpp" />
+    <ClCompile Include="..\src\utils\system_log.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
