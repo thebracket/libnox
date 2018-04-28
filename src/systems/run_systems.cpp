@@ -69,9 +69,8 @@ namespace systems {
 			// Age log
 			calendarsys::run(ms);
 			hunger_system::run(ms);
-			//if (hour_elapsed) settler_spawner::run(ms);
-			// if (hour_elapsed) run_system(settler_spawner::run, duration_ms, SETTLER_SPAWNER_SYSTEM);
-			//wildlife_population::run(ms);
+			if (hour_elapsed) settler_spawner::run(ms);
+			wildlife_population::run(ms);
 			// fluids
 			explosives::run(ms);
 			doors::run(ms);

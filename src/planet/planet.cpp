@@ -24,13 +24,13 @@ void save_planet(const planet_t &planet) {
 }
 
 planet_t load_planet() {
-	planet_t planet;
+	planet_t lplanet;
 
 	std::fstream lbfile(planet_filename, std::ios::in | std::ios::binary);
     cereal::BinaryInputArchive iarchive(lbfile);
-    iarchive(planet);
+    iarchive(lplanet);
 
-	std::cout << planet.biomes.size() << "\n";
+	std::cout << lplanet.biomes.size() << "\n";
 
-	return planet;
+	return lplanet;
 }
