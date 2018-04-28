@@ -4,7 +4,6 @@
 #include "../../global_assets/rng.hpp"
 #include "../../planet/builder/settler_builder.hpp"
 #include "../gui/log_system.hpp"
-#include "../gui/particle_system.hpp"
 #include "../../global_assets/game_pause.hpp"
 #include "../../noxtypes.h"
 #include <sstream>
@@ -46,7 +45,7 @@ namespace systems {
 					for (auto i = 0; i < new_settler_count; ++i) {
 						const position_t spawn_point = settler_arrival_points[i % settler_arrival_points.size()];
 						create_settler(planet, spawn_point.x, spawn_point.y, spawn_point.z, rng, rng.roll_dice(1, 3) - 1);
-						particles::block_destruction_effect(spawn_point.x, spawn_point.y, spawn_point.z, 1.0f, 1.0f, 1.0f, particles::PARTICLE_SMOKE);
+						//particles::block_destruction_effect(spawn_point.x, spawn_point.y, spawn_point.z, 1.0f, 1.0f, 1.0f, particles::PARTICLE_SMOKE);
 					}
 				}
 			}

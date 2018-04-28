@@ -12,6 +12,7 @@
 
 #include "planet.hpp"
 #include "../bengine/filesystem.hpp"
+#include <iostream>
 
 const std::string planet_filename = get_save_path() + std::string("/planet.dat");
 
@@ -28,6 +29,8 @@ planet_t load_planet() {
 	std::fstream lbfile(planet_filename, std::ios::in | std::ios::binary);
     cereal::BinaryInputArchive iarchive(lbfile);
     iarchive(planet);
+
+	std::cout << planet.biomes.size() << "\n";
 
 	return planet;
 }

@@ -60,6 +60,7 @@
 #include "physics/visibility_system.hpp"
 #include "physics/item_wear_system.hpp"
 #include "ai/inventory_system.hpp"
+#include "overworld/settler_spawner_system.hpp"
 
 namespace systems {
 	void run_systems(const double ms) {
@@ -68,6 +69,7 @@ namespace systems {
 			// Age log
 			calendarsys::run(ms);
 			hunger_system::run(ms);
+			//if (hour_elapsed) settler_spawner::run(ms);
 			// if (hour_elapsed) run_system(settler_spawner::run, duration_ms, SETTLER_SPAWNER_SYSTEM);
 			//wildlife_population::run(ms);
 			// fluids
