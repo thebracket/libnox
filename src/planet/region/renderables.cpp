@@ -154,10 +154,10 @@ namespace render {
 	static void render_composite_sentient(bengine::entity_t &e, renderable_composite_t &r, position_t &pos) {
 		// TODO: This should follow a different code path
 		//std::cout << "Render sentient\n";
-		const auto idx = mapidx(pos);
-		if (region::flag(idx, tile_flags::VISIBLE)) {
+		//const auto idx = mapidx(pos);
+		//if (region::flag(idx, tile_flags::VISIBLE)) {
 			render_settler(e, r, pos);
-		}
+		//}
 	}
 
 	static void build_composites() {
