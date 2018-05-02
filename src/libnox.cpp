@@ -306,6 +306,8 @@ namespace nf {
 	}
 
 	std::vector<unit_list_settler_t> impl_unit_list_settlers;
+	std::vector<unit_list_settler_t> impl_unit_list_native;
+	std::vector<unit_list_settler_t> impl_unit_list_wildlife;
 	const char * gender_male = "Male";
 	const char * gender_female = "Female";
 
@@ -332,6 +334,54 @@ namespace nf {
 		});
 		size = impl_unit_list_settlers.size();
 		settler_ptr = size > 0 ? &impl_unit_list_settlers[0] : nullptr;
+	}
+
+	void get_unit_list_natives(size_t &size, unit_list_settler_t *& settler_ptr) {
+		impl_unit_list_native.clear();
+		bengine::each<sentient_ai, name_t, game_stats_t, species_t, health_t>([](bengine::entity_t &e, sentient_ai &s, name_t &n, game_stats_t &stats, species_t &species, health_t &health) {
+			std::string name = n.first_name + std::string(" ") + n.last_name;
+			unit_list_settler_t newsettler;
+
+			strncpy_s(newsettler.name, name.c_str(), 254);
+			strncpy_s(newsettler.gender, species.gender == MALE ? gender_male : gender_female, 8);
+			strncpy_s(newsettler.profession, stats.profession_tag.c_str(), 254);
+			std::string hp = std::string("HP:") + std::to_string(health.current_hitpoints) + std::string("/") + std::to_string(health.max_hitpoints);
+			if (health.blind) hp += std::string(" Blind.");
+			if (health.no_grasp) hp += std::string(" Cannot grasp.");
+			if (health.slow) hp += std::string(" Slow.");
+			if (health.unconscious) hp += std::string(" Unsconscious.");
+			strncpy_s(newsettler.hp, hp.c_str(), 254);
+			newsettler.health_percent = (float)health.current_hitpoints / (float)health.max_hitpoints;
+			newsettler.id = e.id;
+
+			impl_unit_list_native.push_back(newsettler);
+		});
+		size = impl_unit_list_native.size();
+		settler_ptr = size > 0 ? &impl_unit_list_native[0] : nullptr;
+	}
+
+	void get_unit_list_wildlife(size_t &size, unit_list_settler_t *& settler_ptr) {
+		impl_unit_list_wildlife.clear();
+		bengine::each<grazer_ai, name_t, game_stats_t, species_t, health_t>([](bengine::entity_t &e, grazer_ai &s, name_t &n, game_stats_t &stats, species_t &species, health_t &health) {
+			std::string name = n.first_name + std::string(" ") + n.last_name;
+			unit_list_settler_t newsettler;
+
+			strncpy_s(newsettler.name, name.c_str(), 254);
+			strncpy_s(newsettler.gender, species.gender == MALE ? gender_male : gender_female, 8);
+			strncpy_s(newsettler.profession, stats.profession_tag.c_str(), 254);
+			std::string hp = std::string("HP:") + std::to_string(health.current_hitpoints) + std::string("/") + std::to_string(health.max_hitpoints);
+			if (health.blind) hp += std::string(" Blind.");
+			if (health.no_grasp) hp += std::string(" Cannot grasp.");
+			if (health.slow) hp += std::string(" Slow.");
+			if (health.unconscious) hp += std::string(" Unsconscious.");
+			strncpy_s(newsettler.hp, hp.c_str(), 254);
+			newsettler.health_percent = (float)health.current_hitpoints / (float)health.max_hitpoints;
+			newsettler.id = e.id;
+
+			impl_unit_list_wildlife.push_back(newsettler);
+		});
+		size = impl_unit_list_wildlife.size();
+		settler_ptr = size > 0 ? &impl_unit_list_wildlife[0] : nullptr;
 	}
 
 	void zoom_settler(int id) {
@@ -522,5 +572,107 @@ namespace nf {
 		strncpy_s(info.line5, lines[4].c_str(), 254);
 
 		return info;
+	}
+
+	void get_game_mode(int &major, int &minor) {
+		major = game_master_mode;
+		minor = game_design_mode;
+	}
+
+	void set_game_mode(int major, int minor) {
+		game_master_mode = (game_master_mode_t)major;
+		game_design_mode = (game_design_mode_t)minor;
+	}
+
+	std::vector<settler_job_t> impl_jobs_list;
+
+	void get_settler_job_list(size_t &size, settler_job_t *& job_ptr) {
+		impl_jobs_list.clear();
+
+		bengine::each<settler_ai_t, name_t, game_stats_t, species_t, health_t>([](bengine::entity_t &e, settler_ai_t &s, name_t &n, game_stats_t &stats, species_t &species, health_t &health) {
+			std::string name = n.first_name + std::string(" ") + n.last_name;
+			settler_job_t newsettler;
+
+			strncpy_s(newsettler.name, name.c_str(), 254);
+			strncpy_s(newsettler.profession, stats.profession_tag.c_str(), 254);
+			newsettler.is_farmer = e.component<designated_farmer_t>() != nullptr;
+			newsettler.is_lumberjack = e.component<designated_lumberjack_t>() != nullptr;
+			newsettler.is_miner = e.component<designated_miner_t>() != nullptr;
+			newsettler.id = e.id;
+
+			impl_jobs_list.emplace_back(newsettler);
+		});
+
+		size = impl_jobs_list.size();
+		job_ptr = size > 0 ? &impl_jobs_list[0] : nullptr;
+	}
+
+	void make_miner(int id) {
+		bengine::entity_t * settler = bengine::entity(id);
+		if (settler) {
+			settler->assign(designated_miner_t{});
+			auto stats = settler->component<game_stats_t>();
+			if (stats) {
+				stats->original_profession = stats->profession_tag;
+				stats->profession_tag = "Miner";
+			}
+		}
+	}
+
+	void make_farmer(int id) {
+		bengine::entity_t * settler = bengine::entity(id);
+		if (settler) {
+			settler->assign(designated_farmer_t{});
+			auto stats = settler->component<game_stats_t>();
+			if (stats) {
+				stats->original_profession = stats->profession_tag;
+				stats->profession_tag = "Farmer";
+			}
+		}
+	}
+
+	void make_lumberjack(int id) {
+		bengine::entity_t * settler = bengine::entity(id);
+		if (settler) {
+			settler->assign(designated_lumberjack_t{});
+			auto stats = settler->component<game_stats_t>();
+			if (stats) {
+				stats->original_profession = stats->profession_tag;
+				stats->profession_tag = "Lumberjack";
+			}
+		}
+	}
+
+	void fire_miner(int id) {
+		bengine::delete_component<designated_miner_t>(id);
+		bengine::entity_t * settler = bengine::entity(id);
+		if (settler) {
+			auto stats = settler->component<game_stats_t>();
+			if (stats) {
+				stats->profession_tag = stats->original_profession;
+			}
+		}
+	}
+
+	void fire_lumberjack(int id) {
+		bengine::delete_component<designated_lumberjack_t>(id);
+		bengine::entity_t * settler = bengine::entity(id);
+		if (settler) {
+			auto stats = settler->component<game_stats_t>();
+			if (stats) {
+				stats->profession_tag = stats->original_profession;
+			}
+		}
+	}
+
+	void fire_farmer(int id) {
+		bengine::delete_component<designated_farmer_t>(id);
+		bengine::entity_t * settler = bengine::entity(id);
+		if (settler) {
+			auto stats = settler->component<game_stats_t>();
+			if (stats) {
+				stats->profession_tag = stats->original_profession;
+			}
+		}
 	}
 }
