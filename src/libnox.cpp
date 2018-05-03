@@ -28,12 +28,18 @@
 #include "raws/defs/plant_t.hpp"
 #include "raws/items.hpp"
 #include "raws/defs/item_def_t.hpp"
+#include "raws/buildings.hpp"
+#include "raws/defs/building_def_t.hpp"
 #include <array>
 
 namespace nf {
 
 	void set_game_def_path(const char * base_path) {
-		set_raws_path(base_path);
+		const std::string path(base_path);
+		const std::string raws_path = path + "world_defs/";
+		const std::string buildings_path = path + "rex/";
+		set_raws_path(raws_path.c_str());
+		set_building_path(buildings_path.c_str());
 	}
 
 	const char * get_version() {

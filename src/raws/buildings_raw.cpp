@@ -7,8 +7,15 @@
 #include "../bengine/rexspeeder.hpp"
 #include <boost/container/flat_map.hpp>
 #include "../utils/system_log.hpp"
+#include "raws.hpp"
 
 //using namespace rltk;
+
+std::string buildings_path = "C:/Users/Herbert/Development/github/bgame/game_assets/rex/";
+
+void set_building_path(const char * path) {
+	buildings_path = std::string(path);
+}
 
 boost::container::flat_map<std::size_t, building_def_t> building_defs;
 
@@ -240,7 +247,7 @@ void read_buildings() noexcept
                 }
             }
             if (field == "render_rex") {
-                const auto filename = std::string("C:/Users/Herbert/Development/github/bgame/game_assets/rex/") + std::string(lua_tostring(lua_state, -1));
+				const auto filename = buildings_path + std::string(lua_tostring(lua_state, -1));
                 xp::rex_sprite sprite(filename);
                 c.width = sprite.get_width();
                 c.height = sprite.get_height();

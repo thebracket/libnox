@@ -2,6 +2,8 @@
 
 #include <functional>
 
+void set_building_path(const char * path);
+
 struct building_def_t; // Forward declaration
 struct graphviz_t; // Forward
 
