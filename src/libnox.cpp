@@ -696,6 +696,21 @@ namespace nf {
 					impl_cursors.emplace_back(cube_t{ gp.second.x, gp.second.y, gp.second.z, 1, 1, 1, 3 });
 				}
 			}
+			else if (game_design_mode == CHOPPING) {
+				for (size_t i = 0; i < REGION_TILES_COUNT; ++i) {
+					auto tree_id = region::tree_id(i);
+					if (tree_id > 0) {
+						auto[x, y, z] = idxmap(i);
+						if (designations->chopping.find(tree_id) != designations->chopping.end()) {
+							impl_cursors.emplace_back(cube_t{ x, y, z, 1, 1, 1, 2 });
+							//std::cout << "Highlighting tree at " << x << ", " << y << ", " << z << "\n";
+						}
+						//else {
+						//	add_cube_geometry(data, n_elements_cursor_elements, x, y, z, 1, 1, 2);
+						//}
+					}
+				}
+			}
 		}
 
 		size = impl_cursors.size();
@@ -722,6 +737,41 @@ namespace nf {
 				[&idx](std::pair<bool, position_t> p) { return idx == mapidx(p.second); }
 			),
 				designations->guard_points.end());
+		}
+	}
+
+	void lumberjack_set() {
+		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
+		const auto tree_id = region::tree_id(idx);
+		if (tree_id > 0) {
+			int lowest_z = camera_position->region_z;
+			const int stop_z = lowest_z - 10;
+
+			position_t tree_pos{ mouse_x, mouse_y, lowest_z };
+			while (lowest_z > stop_z) {
+				for (int y = -10; y<10; ++y) {
+					for (int x = -10; x<10; ++x) {
+						const int tree_idx = mapidx(mouse_x + x, mouse_y + y, lowest_z);
+						if (region::tree_id(tree_idx) == tree_id) {
+							tree_pos.x = mouse_x + x;
+							tree_pos.y = mouse_y + y;
+							tree_pos.z = lowest_z;
+							// TODO: Emit Particles
+						}
+					}
+				}
+				--lowest_z;
+			}
+
+			designations->chopping[(int)tree_id] = tree_pos;
+		}
+	}
+
+	void lumberjack_clear() {
+		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
+		const auto tree_id = region::tree_id(idx);
+		if (tree_id > 0) {
+			designations->chopping.erase((int)tree_id);
 		}
 	}
 }
