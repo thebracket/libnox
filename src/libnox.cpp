@@ -681,4 +681,16 @@ namespace nf {
 			}
 		}
 	}
+
+	static std::vector<cube_t> impl_cursors;
+
+	void cursor_list(size_t &size, cube_t *& cube_ptr) {
+		impl_cursors.clear();
+
+		// Normal cursor
+		impl_cursors.emplace_back(cube_t{ mouse_x, mouse_y, mouse_z, 1, 1, 1, 1 });
+
+		size = impl_cursors.size();
+		cube_ptr = size > 0 ? &impl_cursors[0] : nullptr;
+	}
 }
