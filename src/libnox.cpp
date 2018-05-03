@@ -690,7 +690,38 @@ namespace nf {
 		// Normal cursor
 		impl_cursors.emplace_back(cube_t{ mouse_x, mouse_y, mouse_z, 1, 1, 1, 1 });
 
+		if (game_master_mode == DESIGN) {
+			if (game_design_mode == GUARDPOINTS) {
+				for (const auto &gp : designations->guard_points) {
+					impl_cursors.emplace_back(cube_t{ gp.second.x, gp.second.y, gp.second.z, 1, 1, 1, 3 });
+				}
+			}
+		}
+
 		size = impl_cursors.size();
 		cube_ptr = size > 0 ? &impl_cursors[0] : nullptr;
+	}
+
+	void guardmode_set() {
+		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
+		if (region::flag(idx, tile_flags::CAN_STAND_HERE)) {
+			bool found = false;
+			for (const auto &g : designations->guard_points) {
+				if (mapidx(g.second) == idx) found = true;
+			}
+			if (!found) designations->guard_points.push_back(std::make_pair(false, position_t{ mouse_x, mouse_y, mouse_z }));
+		}
+	}
+
+	void guardmode_clear() {
+		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
+		if (region::flag(idx, tile_flags::CAN_STAND_HERE)) {
+			designations->guard_points.erase(std::remove_if(
+				designations->guard_points.begin(),
+				designations->guard_points.end(),
+				[&idx](std::pair<bool, position_t> p) { return idx == mapidx(p.second); }
+			),
+				designations->guard_points.end());
+		}
 	}
 }
