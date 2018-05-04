@@ -127,7 +127,7 @@ namespace systems {
 			visibility::run(ms);
 			vegetation::run(ms);
 			item_wear::run(ms);
-			inventory_system::run(ms);
 		}
+		inventory_system::run(ms);
 	}
 }
