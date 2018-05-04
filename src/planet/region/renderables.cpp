@@ -5,6 +5,10 @@
 #include "../../global_assets/building_designations.hpp"
 #include "../../raws/species.hpp"
 #include "region.hpp"
+#include "../../global_assets/building_designations.hpp"
+#include "../../global_assets/game_building.hpp"
+#include "../../raws/buildings.hpp"
+#include "../../raws/defs/building_def_t.hpp"
 #include <map>
 #include <vector>
 
@@ -28,7 +32,7 @@ namespace render {
 		}
 	}
 
-	static void build_voxel_buildings() {
+	static void build_voxel_buildings(int selected_building, int mouse_wx, int mouse_wy, int mouse_wz) {
 		bengine::each<building_t, position_t>(
 			[](bengine::entity_t &e, building_t &b, position_t &pos) {
 			if (pos.z > camera_position->region_z - 10 && pos.z <= camera_position->region_z) {
@@ -54,6 +58,53 @@ namespace render {
 				}
 			}
 		});
+
+		if (game_master_mode == DESIGN && game_design_mode == BUILDING) {
+
+
+			// We have a building selected; determine if it can be built and show it
+			const auto tag = buildings::build_mode_building.tag;
+			const auto building_def = get_building_def(tag);
+			if (building_def && building_def->vox_model > 0) {
+				// We have the model and the definition; see if its possible to build
+				auto can_build = true;
+
+				const auto bx = mouse_wx + (building_def->width == 3 ? -1 : 0);
+				const auto by = mouse_wy + (building_def->height == 3 ? -1 : 0);
+				const auto bz = mouse_wz;
+
+				std::vector<int> target_tiles;
+				for (auto y = by; y < by + building_def->height; ++y) {
+					for (auto x = bx; x < bx + building_def->width; ++x) {
+						const auto idx = mapidx(x, y, bz);
+						if (!region::flag(idx, tile_flags::CAN_STAND_HERE))
+						{
+							// TODO: Check or open space and allow that for some tags.
+							if (!(tag == "floor" || tag == "wall"))
+							{
+								can_build = false;
+							}
+						}
+						if (region::get_building_id(idx) > 0) can_build = false;
+						target_tiles.emplace_back(idx);
+					}
+				}
+
+				if (can_build) {
+
+					add_voxel_model(building_def->vox_model, -1, static_cast<float>(bx), static_cast<float>(by), static_cast<float>(bz), 1.0f, 1.0f, 1.0f);
+
+					/*if (systems::left_click) {
+						// Perform the building
+						systems::inventory_system::building_request(bx, by, bz, buildings::build_mode_building);
+						buildings::has_build_mode_building = false;
+					}*/
+				}
+				else {
+					add_voxel_model(building_def->vox_model, -1, static_cast<float>(bx), static_cast<float>(by), static_cast<float>(bz), 1.0f, 0.0f, 0.0f);
+				}
+			}
+		}
 	}
 
 	static void build_voxel_items() {
@@ -204,9 +255,9 @@ namespace render {
 		});
 	}
 
-	void build_voxel_list() {
+	void build_voxel_list(int selected_building, int mouse_x, int mouse_y, int mouse_z) {
 		models_to_render.clear();
-		build_voxel_buildings();
+		build_voxel_buildings(selected_building, mouse_x, mouse_y, mouse_z);
 		build_voxel_items();
 		build_composites();
 		build_creature_models();

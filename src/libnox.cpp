@@ -30,9 +30,15 @@
 #include "raws/defs/item_def_t.hpp"
 #include "raws/buildings.hpp"
 #include "raws/defs/building_def_t.hpp"
+#include "systems/helpers/inventory_assistant.hpp"
 #include <array>
 
 namespace nf {
+
+	static int mouse_x = 0;
+	static int mouse_y = 0;
+	static int mouse_z = 0;
+	int selected_building = 0;
 
 	void set_game_def_path(const char * base_path) {
 		const std::string path(base_path);
@@ -204,7 +210,7 @@ namespace nf {
 
 	void voxel_render_list(size_t &size, dynamic_model_t *& model_ptr) {
 		impl_dyn_models.clear();
-		render::build_voxel_list();
+		render::build_voxel_list(selected_building, mouse_x, mouse_y, mouse_z);
 		render::get_model_list(impl_dyn_models);
 		size = impl_dyn_models.size();
 		model_ptr = size > 0 ? &impl_dyn_models[0] : nullptr;
@@ -413,11 +419,7 @@ namespace nf {
 				camera->following = id;
 			}
 		}
-	}
-
-	static int mouse_x = 0;
-	static int mouse_y = 0;
-	static int mouse_z = 0;
+	}	
 
 	void set_world_pos_from_mouse(int x, int y, int z) {
 		mouse_x = x;
@@ -772,6 +774,65 @@ namespace nf {
 		const auto tree_id = region::tree_id(idx);
 		if (tree_id > 0) {
 			designations->chopping.erase((int)tree_id);
+		}
+	}
+
+	std::vector<buildable_building_t> impl_available_buildings;
+
+	void available_buildings(size_t &size, buildable_building_t *& build_ptr) {
+		impl_available_buildings.clear();
+
+		auto available_buildings = inventory::get_available_buildings();
+		for (const auto &building : available_buildings) {
+			buildable_building_t b;
+			strncpy_s(b.tag, building.tag.c_str(), 254);
+			strncpy_s(b.displayName, building.name.c_str(), 254);
+			impl_available_buildings.emplace_back(b);
+		}
+
+		size = impl_available_buildings.size();
+		build_ptr = size > 0 ? &impl_available_buildings[0] : nullptr;
+	}
+
+	void set_selected_building(int list_index) {
+		selected_building = list_index;
+
+		auto available_buildings = inventory::get_available_buildings();
+		buildings::has_build_mode_building = true;
+		buildings::build_mode_building = available_buildings[list_index];
+	}
+
+	void place_selected_building() {
+		auto can_build = true;
+		const auto tag = buildings::build_mode_building.tag;
+		const auto building_def = get_building_def(tag);
+
+		const auto bx = mouse_x + (building_def->width == 3 ? -1 : 0);
+		const auto by = mouse_y + (building_def->height == 3 ? -1 : 0);
+		const auto bz = mouse_z;
+
+		std::vector<int> target_tiles;
+		for (auto y = by; y < by + building_def->height; ++y) {
+			for (auto x = bx; x < bx + building_def->width; ++x) {
+				const auto idx = mapidx(x, y, bz);
+				if (!region::flag(idx, tile_flags::CAN_STAND_HERE))
+				{
+					// TODO: Check or open space and allow that for some tags.
+					if (!(tag == "floor" || tag == "wall"))
+					{
+						can_build = false;
+					}
+				}
+				if (region::get_building_id(idx) > 0) can_build = false;
+				target_tiles.emplace_back(idx);
+			}
+		}
+
+		if (can_build) {
+
+			// Perform the building
+			systems::inventory_system::building_request(bx, by, bz, buildings::build_mode_building);
+			buildings::has_build_mode_building = false;
 		}
 	}
 }
