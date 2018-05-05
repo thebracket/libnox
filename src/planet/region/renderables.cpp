@@ -18,17 +18,18 @@ namespace render {
 		float axis1, axis2, axis3, rot_angle;
 		float tint_r, tint_g, tint_b;
 		int entity_id;
+		float x_scale, y_scale, z_scale;
 	};
 
 	std::map<int, std::vector<instance_t>> models_to_render;
 
-	static inline void add_voxel_model(const int &model, const int &id, const float &x, const float &y, const float &z, const float &red, const float &green, const float &blue, const float angle = 0.0f, const float x_rot = 0.0f, const float y_rot = 0.0f, const float z_rot = 0.0f) {
+	static inline void add_voxel_model(const int &model, const int &id, const float &x, const float &y, const float &z, const float &red, const float &green, const float &blue, const float angle = 0.0f, const float x_rot = 0.0f, const float y_rot = 0.0f, const float z_rot = 0.0f, const float xscale = 1.0f, const float yscale = 1.0f, const float zscale = 1.0f) {
 		auto finder = models_to_render.find(model);
 		if (finder != models_to_render.end()) {
-			finder->second.push_back(instance_t{ x, y, z, x_rot, y_rot, z_rot, angle, red, green, blue, id });
+			finder->second.push_back(instance_t{ x, y, z, x_rot, y_rot, z_rot, angle, red, green, blue, id, xscale, yscale, zscale });
 		}
 		else {
-			models_to_render.insert(std::make_pair(model, std::vector<instance_t>{instance_t{ x, y, z, x_rot, y_rot, z_rot, angle, red, green, blue, id }}));
+			models_to_render.insert(std::make_pair(model, std::vector<instance_t>{instance_t{ x, y, z, x_rot, y_rot, z_rot, angle, red, green, blue, id, xscale, yscale, zscale }}));
 		}
 	}
 
@@ -49,9 +50,9 @@ namespace render {
 					auto blue = 1.0f;
 
 					if (!b.complete) {
-						red = 0.1f;
-						green = 0.1f;
-						blue = 0.1f;
+						red = 0.0f;
+						green = 0.0f;
+						blue = 1.0f;
 					}
 
 					add_voxel_model(b.vox_model, e.id, x, y, z, red, green, blue, static_cast<float>(pos.rotation), 0.0f, 1.0f, 0.0f);
@@ -59,7 +60,7 @@ namespace render {
 			}
 		});
 
-		if (game_master_mode == DESIGN && game_design_mode == BUILDING) {
+		if (game_master_mode == DESIGN && game_design_mode == BUILDING && buildings::has_build_mode_building) {
 
 
 			// We have a building selected; determine if it can be built and show it
@@ -92,7 +93,7 @@ namespace render {
 
 				if (can_build) {
 
-					add_voxel_model(building_def->vox_model, -1, static_cast<float>(bx), static_cast<float>(by), static_cast<float>(bz), 1.0f, 1.0f, 1.0f);
+					add_voxel_model(building_def->vox_model, -1, static_cast<float>(bx), static_cast<float>(by), static_cast<float>(bz), 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
 					/*if (systems::left_click) {
 						// Perform the building
@@ -101,7 +102,7 @@ namespace render {
 					}*/
 				}
 				else {
-					add_voxel_model(building_def->vox_model, -1, static_cast<float>(bx), static_cast<float>(by), static_cast<float>(bz), 1.0f, 0.0f, 0.0f);
+					add_voxel_model(building_def->vox_model, -1, static_cast<float>(bx), static_cast<float>(by), static_cast<float>(bz), 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 				}
 			}
 		}
@@ -157,20 +158,23 @@ namespace render {
 			const auto rot1 = is_upright ? 0.0f : 1.0f;
 			const auto rot2 = is_upright ? 1.0f : 0.0f;
 			const auto rot3 = 0.0f;
+			const auto xscale = 1.0f;
+			const auto zscale = species->height_cm / 200.0f;
+			const auto yscale = 1.0f;			
 
 			const auto cache_finder = composite_cache.find(e.id);
 			if (cache_finder != composite_cache.end())
 			{
 				for (const auto &c : cache_finder->second)
 				{
-					add_voxel_model(c.voxel_model, e.id, inner_x, inner_y, inner_z, c.r, c.g, c.b, rotation, rot1, rot2, rot3);
+					add_voxel_model(c.voxel_model, e.id, inner_x, inner_y, inner_z, c.r, c.g, c.b, rotation, rot1, rot2, rot3, xscale, yscale, zscale);
 				}
 				return;
 			}
 			std::vector<composite_cache_t> cc;
 
 			// Clip check passed - add the model
-			add_voxel_model(49, e.id, inner_x, inner_y, inner_z, species->skin_color.second.r, species->skin_color.second.g, species->skin_color.second.b, rotation, rot1, rot2, rot3);
+			add_voxel_model(49, e.id, inner_x, inner_y, inner_z, species->skin_color.second.r, species->skin_color.second.g, species->skin_color.second.b, rotation, rot1, rot2, rot3, xscale, yscale, zscale);
 			cc.emplace_back(composite_cache_t{ 49, species->skin_color.second.r, species->skin_color.second.g, species->skin_color.second.b });
 
 			// Add hair
@@ -185,15 +189,15 @@ namespace render {
 			default: hair_vox = 0;
 			}
 			if (hair_vox > 0) {
-				add_voxel_model(hair_vox, e.id, inner_x, inner_y, inner_z, species->hair_color.second.r, species->hair_color.second.g, species->hair_color.second.b, rotation, rot1, rot2, rot3);
+				add_voxel_model(hair_vox, e.id, inner_x, inner_y, inner_z, species->hair_color.second.r, species->hair_color.second.g, species->hair_color.second.b, rotation, rot1, rot2, rot3, xscale, yscale, zscale);
 				cc.emplace_back(composite_cache_t{ hair_vox, species->hair_color.second.r, species->hair_color.second.g, species->hair_color.second.b });
 			}
 
 			// Add items
 			using namespace bengine;
-			each<item_t, item_carried_t>([&e, &inner_x, &inner_y, &inner_z, &rotation, &rot1, &rot2, &rot3, &cc](entity_t &E, item_t &item, item_carried_t &carried) {
+			each<item_t, item_carried_t>([&e, &inner_x, &inner_y, &inner_z, &rotation, &rot1, &rot2, &rot3, &cc, &xscale, &yscale, &zscale](entity_t &E, item_t &item, item_carried_t &carried) {
 				if (carried.carried_by == e.id && item.clothing_layer > 0) {
-					add_voxel_model(item.clothing_layer, e.id, inner_x, inner_y, inner_z, item.clothing_color.r, item.clothing_color.g, item.clothing_color.b, rotation, rot1, rot2, rot3);
+					add_voxel_model(item.clothing_layer, e.id, inner_x, inner_y, inner_z, item.clothing_color.r, item.clothing_color.g, item.clothing_color.b, rotation, rot1, rot2, rot3, xscale, yscale, zscale);
 					cc.emplace_back(composite_cache_t{ item.clothing_layer, item.clothing_color.r, item.clothing_color.g, item.clothing_color.b });
 				}
 			});
@@ -270,7 +274,8 @@ namespace render {
 					m.first,
 					n.entity_id,
 					n.x, n.y, n.z, n.axis1, n.axis2, n.axis3, n.rot_angle - 90.0f,
-					n.tint_r, n.tint_g, n.tint_b
+					n.tint_r, n.tint_g, n.tint_b,
+					n.x_scale, n.y_scale, n.z_scale
 					});
 			}
 		}

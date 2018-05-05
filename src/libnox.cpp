@@ -277,7 +277,7 @@ namespace nf {
 	}
 
 	void on_tick(const double duration_ms) {
-		systems::run_systems(duration_ms / 1000.0);
+		systems::run_systems(duration_ms * 1000.0);
 	}
 
 	bool is_world_loadable() {
@@ -798,8 +798,13 @@ namespace nf {
 		selected_building = list_index;
 
 		auto available_buildings = inventory::get_available_buildings();
-		buildings::has_build_mode_building = true;
-		buildings::build_mode_building = available_buildings[list_index];
+		if (list_index < available_buildings.size() && list_index > -1) {
+			buildings::has_build_mode_building = true;
+			buildings::build_mode_building = available_buildings[list_index];
+		}
+		else {
+			buildings::has_build_mode_building = false;
+		}
 	}
 
 	void place_selected_building() {
