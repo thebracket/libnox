@@ -99,7 +99,7 @@ namespace nf {
 	tooltip_info_t get_tooltip_info() {
 		tooltip_info_t info;
 
-		std::array<std::string, 5> lines;
+		std::vector<std::string> lines;
 
 		const int tile_idx = mapidx(mouse_x, mouse_y, mouse_z);
 
@@ -125,9 +125,8 @@ namespace nf {
 			if (region::tile_type(tile_idx) != tile_type::OPEN_SPACE) {
 				ss << " (" << region::tile_hit_points(tile_idx) << ")";
 			}
-			lines[0] = ss.str();
+			lines.emplace_back(ss.str());
 		}
-		int line_idx = 1;
 
 		{
 			// Farming
@@ -142,8 +141,7 @@ namespace nf {
 				case farm_steps::GROWING: ss << "Growing"; break;
 				}
 				ss << ". Weeded/Watered " << farm_finder->second.days_since_weeded << "/" << farm_finder->second.days_since_watered << " days ago.";
-				lines[line_idx] = ss.str();
-				++line_idx;
+				lines.emplace_back(ss.str());
 			}
 		}
 
@@ -174,8 +172,7 @@ namespace nf {
 						}
 					}
 					ss << ")";
-					lines[line_idx] = ss.str();
-					++line_idx;
+					lines.emplace_back(ss.str());
 				}
 			}
 		}
@@ -191,8 +188,7 @@ namespace nf {
 					added = true;
 				}
 			});
-			if (added && line_idx < 5) lines[line_idx] = ss.str();
-			++line_idx;
+			if (added) lines.emplace_back(ss.str());
 		}
 
 		// Items
@@ -226,20 +222,75 @@ namespace nf {
 			for (const auto &it : items) {
 				const auto n = std::to_string(it.second);
 				ss << n << "x " << it.first << "  ";
-				added = true;
+				lines.emplace_back(ss.str());
 			}
-			if (added && line_idx < 5) lines[line_idx] = ss.str();
-			++line_idx;
 		}
 
 		// Buildings
-		// Stockpiles
+		const auto building_on_tile = region::get_building_id(tile_idx);
+		if (building_on_tile > 0) {
+			const auto building_entity = bengine::entity(building_on_tile);
+			std::string building_name = "Unknown Building";
+			if (building_entity) {
+				const auto finder = building_entity->component<name_t>();
+				const auto building = building_entity->component<building_t>();
+				if (finder) {
+					if (building->complete) {
+						building_name = finder->first_name + std::string(" (") + std::to_string(building->hit_points)
+							+ std::string("/") + std::to_string(building->max_hit_points) + std::string(")");
 
-		strncpy_s(info.line1, lines[0].c_str(), 254);
-		strncpy_s(info.line2, lines[1].c_str(), 254);
-		strncpy_s(info.line3, lines[2].c_str(), 254);
-		strncpy_s(info.line4, lines[3].c_str(), 254);
-		strncpy_s(info.line5, lines[4].c_str(), 254);
+						if (building_entity->component<claimed_t>()) building_name += " (c)";
+					}
+					else {
+						building_name = std::string("(") + finder->first_name + std::string(") - Incomplete");
+					}
+				}
+				lines.emplace_back(building_name);
+			}
+
+			const auto container = building_entity->component<construct_container_t>();
+			if (container) {
+				//std::cout << "It's a container\n";
+				std::map<std::string, int> items;
+				bengine::each<item_t, item_stored_t>([&items, &building_entity](bengine::entity_t &entity, item_t &item, item_stored_t &stored) {
+					if (stored.stored_in == building_entity->id) {
+						auto finder = items.find(item.item_name);
+						if (finder == items.end()) {
+							std::string claimed;
+							if (entity.component<claimed_t>() != nullptr) claimed = " (c)";
+							std::string quality;
+							std::string wear;
+
+							auto qual = entity.component<item_quality_t>();
+							auto wr = entity.component<item_wear_t>();
+							if (qual) quality = std::string(" (") + qual->get_quality_text() + std::string(" quality)");
+							if (wr) wear = std::string(" (") + wr->get_wear_text() + std::string(")");
+
+							items[item.item_name + claimed + quality + wear] = 1;
+						}
+						else {
+							++finder->second;
+						}
+					}
+				});
+
+				for (const auto &it : items) {
+					const auto n = std::to_string(it.second);
+					lines.push_back(std::string(" ") + n + std::string("x ") + it.first);
+				}
+			}
+		}
+
+		// Stockpiles
+		if (region::stockpile_id(tile_idx) > 0) {
+			lines.emplace_back(std::string("Stockpile #") + std::to_string(region::stockpile_id(tile_idx)));
+		}
+
+		std::stringstream ss;
+		for (const auto &s : lines) {
+			ss << s << "\n";
+		}
+		strncpy_s(info.tooltip_data, ss.str().c_str(), 2048);
 
 		return info;
 	}
