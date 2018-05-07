@@ -74,6 +74,11 @@ namespace nf {
 		bool is_hunter;
 		int id;
 	};
+
+	struct buildable_building_t {
+		char tag[254];
+		char displayName[254];
+	};
 }
 
 #endif
