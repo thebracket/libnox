@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include "../../noxtypes.h"
+#include "../../noxconsts.h"
 
 namespace systems {
 	namespace gravity {

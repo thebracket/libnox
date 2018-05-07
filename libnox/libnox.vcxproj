@@ -93,6 +93,12 @@
       <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;FMT_HEADER_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FloatingPointModel>Fast</FloatingPointModel>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <PostBuildEvent>
       <Command>C:\Users\Herbert\Development\github\libnox\deploy.bat</Command>
@@ -121,6 +127,10 @@
       <SDLCheck>false</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <MinimalRebuild>true</MinimalRebuild>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -276,8 +286,11 @@
     <ClInclude Include="..\src\global_assets\game_planet.hpp" />
     <ClInclude Include="..\src\global_assets\rng.hpp" />
     <ClInclude Include="..\src\global_assets\spatial_db.hpp" />
+    <ClInclude Include="..\src\libnox-render.hpp" />
     <ClInclude Include="..\src\libnox.h" />
+    <ClInclude Include="..\src\noxconsts.h" />
     <ClInclude Include="..\src\noxtypes.h" />
+    <ClInclude Include="..\src\nox_impl_helpers.hpp" />
     <ClInclude Include="..\src\planet\builder\biome_builder.hpp" />
     <ClInclude Include="..\src\planet\builder\history_builder.hpp" />
     <ClInclude Include="..\src\planet\builder\map_builder.hpp" />
@@ -443,6 +456,13 @@
     <ClCompile Include="..\src\global_assets\game_planet.cpp" />
     <ClCompile Include="..\src\global_assets\rng.cpp" />
     <ClCompile Include="..\src\global_assets\spatial_db.cpp" />
+    <ClCompile Include="..\src\libnox-chunks.cpp" />
+    <ClCompile Include="..\src\libnox-design.cpp" />
+    <ClCompile Include="..\src\libnox-menu.cpp" />
+    <ClCompile Include="..\src\libnox-mode.cpp" />
+    <ClCompile Include="..\src\libnox-render.cpp" />
+    <ClCompile Include="..\src\libnox-setup.cpp" />
+    <ClCompile Include="..\src\libnox-ui.cpp" />
     <ClCompile Include="..\src\libnox.cpp" />
     <ClCompile Include="..\src\planet\builder\biome_builder.cpp" />
     <ClCompile Include="..\src\planet\builder\history_builder.cpp" />

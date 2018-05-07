@@ -50,8 +50,8 @@ namespace render {
 					auto blue = 1.0f;
 
 					if (!b.complete) {
-						red = 0.0f;
-						green = 0.0f;
+						red = 1.0f;
+						green = 1.0f;
 						blue = 1.0f;
 					}
 

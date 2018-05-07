@@ -13,7 +13,7 @@
 #include "constants.hpp"
 #include "civilizations.hpp"
 #include "history.hpp"
-#include "../noxtypes.h"
+#include "../noxconsts.h"
 
 namespace block_type {
 	constexpr uint8_t MAX_BLOCK_TYPE = 9;

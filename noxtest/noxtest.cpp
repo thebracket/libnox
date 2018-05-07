@@ -1,6 +1,7 @@
 #include <iostream>
 #include "../src/libnox.h"
 #include "../src/noxtypes.h"
+#include "../src/noxconsts.h"
 
 int main() {
 	std::cout << "Loading the planet...\n";

@@ -3,7 +3,7 @@
 #include "../components/position.hpp"
 #include <tuple>
 #include "constants.hpp"
-#include "../noxtypes.h"
+#include "../noxconsts.h"
 
 #define BOUNDS_CHECKING 1
 
