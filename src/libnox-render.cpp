@@ -8,6 +8,7 @@
 #include "global_assets/game_ecs.hpp"
 #include "global_assets/game_mode.hpp"
 #include "global_assets/game_designations.hpp"
+#include "global_assets/farming_designations.hpp"
 #include "nox_impl_helpers.hpp"
 #include <vector>
 
@@ -165,6 +166,11 @@ namespace nf {
 						//	add_cube_geometry(data, n_elements_cursor_elements, x, y, z, 1, 1, 2);
 						//}
 					}
+				}
+			}
+			else if (game_design_mode == HARVEST) {
+				for (const auto &idx : farm_designations->harvest) {					
+					impl::cursors.emplace_back(cube_t{ idx.second.x, idx.second.y, idx.second.z, 1, 1, 1, 4 });
 				}
 			}
 		}

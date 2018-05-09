@@ -423,4 +423,48 @@ namespace nf {
 
 		return result;
 	}
+
+	tooltip_info_t get_farm_yield() {
+		tooltip_info_t info;
+
+		std::stringstream ss;
+
+		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
+		if (region::veg_type(idx) > 0) {
+			auto p = get_plant_def(region::veg_type(idx));
+			if (p && !p->provides.empty()) {
+				const auto harvests_to = p->provides[region::veg_lifecycle(idx)];
+				if (harvests_to != "none") {
+					const auto finder = get_item_def(harvests_to);
+					if (finder != nullptr) {
+						ss << finder->name;
+					}
+				}
+			}
+		}
+
+		strncpy_s(info.tooltip_data, ss.str().c_str(), 2048);
+		return info;
+	}
+
+	void harvest_set() {
+		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
+		bool found = false;
+		for (const auto &g : farm_designations->harvest) {
+			if (mapidx(g.second) == idx) found = true;
+		}
+		if (!found) {
+			farm_designations->harvest.emplace_back(std::make_pair(false, position_t{ mouse_x, mouse_y, mouse_z }));
+		}
+	}
+
+	void harvest_clear() {
+		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
+		farm_designations->harvest.erase(std::remove_if(
+			farm_designations->harvest.begin(),
+			farm_designations->harvest.end(),
+			[&idx](std::pair<bool, position_t> p) { return idx == mapidx(p.second); }
+		),
+			farm_designations->harvest.end());
+	}
 }
