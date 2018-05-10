@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 
 struct plant_t; // Forward
 
@@ -23,3 +24,5 @@ void sanity_check_plants() noexcept;
  * Load plant definitions from Lua
  */
 void read_plant_types() noexcept;
+
+void dump_plant_data(std::stringstream &ss);

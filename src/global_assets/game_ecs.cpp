@@ -799,7 +799,7 @@ namespace bengine {
 
 	void ecs_load(std::unique_ptr<std::ifstream> &lbfile) noexcept
 	{
-		// TODO: Clear everything!
+		impl::ecs.delete_all_entities();
 		cereal::PortableBinaryInputArchive iarchive(*lbfile);
 		iarchive(impl::ecs);
 		for (auto &e : impl::ecs.entities)

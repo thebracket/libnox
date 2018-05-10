@@ -61,10 +61,8 @@ namespace bengine
 
 		void delete_all_entities() noexcept
 		{
-			for (auto & e : entities)
-			{
-				delete_entity(e.first);
-			}
+			entities.clear();
+			delete_all_components(storage, std::index_sequence_for<Components...>{});
 		}
 
 		template <class ComponentToDelete>

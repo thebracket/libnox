@@ -2,6 +2,7 @@
 #include "../src/libnox.h"
 #include "../src/noxtypes.h"
 #include "../src/noxconsts.h"
+#include "../src/raws/plants.hpp"
 
 int main() {
 	std::cout << "Loading the planet...\n";
@@ -62,6 +63,10 @@ int main() {
 	std::cout << "Running a free tick\n";
 	nf::set_pause_mode(0);
 	nf::on_tick(20.0);
+
+	std::stringstream ss;
+	dump_plant_data(ss);
+	std::cout << ss.str() << "\n";
 
 	std::cout << "Press ENTER to close\n";
 	std::cin.ignore();

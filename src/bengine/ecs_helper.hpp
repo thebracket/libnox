@@ -33,4 +33,15 @@ namespace bengine
 		});
 	}
 
+	/*
+	* Given a storage pack, it erases a component belonging to a given entity ID.
+	*/
+	template<typename ...Ts, size_t... I>
+	void delete_all_components(std::tuple<std::pair<size_t, std::map<int, Ts>>...> &tuple, std::index_sequence<I...>) noexcept
+	{
+		(void)(std::initializer_list<int> {
+			(std::get<I>(tuple).second.clear(), 0)...
+		});
+	}
+
 }

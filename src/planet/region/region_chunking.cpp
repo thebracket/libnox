@@ -33,6 +33,7 @@ namespace region {
 		int index = 0, base_x = 0, base_y = 0, base_z = 0;
 		std::array<layer_t, CHUNK_SIZE> layers;
 		std::map<int, std::vector<std::tuple<int, int, int>>> static_voxel_models;
+		std::vector<std::tuple<int, int, int, int, int>> vegetation_models; // plant, state, x, y, z
 	};
 
 	std::array<chunk_t, CHUNKS_TOTAL> chunks;
@@ -192,7 +193,7 @@ namespace region {
 		if (region::stockpile_id(idx) > 0) return 3; // TODO: Determine texture
 
 													 // We no longer hard-code grass.
-		if (region::veg_type(idx) > 0 && !region::flag(idx, tile_flags::CONSTRUCTION)) {
+		/*if (region::veg_type(idx) > 0 && !region::flag(idx, tile_flags::CONSTRUCTION)) {
 			switch (region::veg_lifecycle(idx)) {
 			case 0: return 18; // Germination
 			case 1: return 21; // Sprouting
@@ -200,7 +201,7 @@ namespace region {
 			case 3: return 24; // Flowering
 			}
 			return 0; // Grass is determined to be index 0
-		}
+		}*/
 		const auto material_idx = region::material(idx);
 		const auto material = get_material(material_idx);
 		if (!material) return 3;
@@ -248,6 +249,7 @@ namespace region {
 			layer.floors.clear();
 		}
 		chunks[chunk_idx].static_voxel_models.clear();
+		chunks[chunk_idx].vegetation_models.clear();
 
 		const int base_x = chunks[chunk_idx].base_x;
 		const int base_y = chunks[chunk_idx].base_y;
@@ -275,6 +277,10 @@ namespace region {
 								floors.insert(std::make_pair(ridx, get_floor_tex(ridx)));
 								if (farm_designations->farms.find(ridx) != farm_designations->farms.end()) {
 									chunks[chunk_idx].static_voxel_models[116].push_back(std::make_tuple(region_x, region_y, region_z));
+								}
+
+								if (region::veg_type(ridx) > 0 && !region::flag(ridx, tile_flags::CONSTRUCTION)) {
+									chunks[chunk_idx].vegetation_models.emplace_back(std::make_tuple<int, int, int, int, int>( (int)region::veg_type(ridx), (int)region::veg_lifecycle(ridx), (int)region_x, (int)region_y, (int)region_z ));
 								}
 							}
 							else if (is_cube(tiletype))
@@ -374,6 +380,12 @@ namespace region {
 			for (const auto &n : m.second) {
 				models.emplace_back(nf::static_model_t{ m.first, std::get<0>(n), std::get<1>(n), std::get<2>(n) });
 			}
+		}
+	}
+
+	void get_chunk_veg(const int &chunk_idx, std::vector<nf::veg_t> &veg) {
+		for (const auto &v : chunks[chunk_idx].vegetation_models) {
+			veg.emplace_back(nf::veg_t{ std::get<0>(v), std::get<1>(v), std::get<2>(v), std::get<3>(v), std::get<4>(v) });
 		}
 	}
 }

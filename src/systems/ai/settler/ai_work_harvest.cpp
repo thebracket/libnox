@@ -26,7 +26,6 @@ namespace systems {
 
 		namespace jobs_board {
 			void evaluate_harvest(job_board_t &board, entity_t &e, position_t &pos, job_evaluator_base_t *jt) {
-				if (e.component<designated_farmer_t>() == nullptr) return; // Not a farmer
 				if (farm_designations->harvest.empty()) return; // Nothing to harvest
 
 				board.insert(std::make_pair((int)bengine::distance3d(pos.x, pos.y, pos.z, farm_designations->harvest.begin()->second.x, farm_designations->harvest.begin()->second.y, farm_designations->harvest.begin()->second.z), jt));
@@ -37,31 +36,10 @@ namespace systems {
 		static work::templated_work_steps_t<ai_tag_work_harvest> work;
 
 		inline void find_hoe(entity_t &e, ai_tag_work_harvest &h, ai_tag_my_turn_t &t, position_t &pos) {
-			work::get_tool<item_farming_t, designated_farmer_t, ai_tag_work_harvest>(e, work, h, pos,
-				[&h]() {
-				// On we have it
-				h.step = ai_tag_work_harvest::harvest_steps::FIND_HARVEST;
-			},
-				[&h]() {
-				// On need to find it
-				h.step = ai_tag_work_harvest::harvest_steps::FETCH_HOE;
-			});
+			h.step = ai_tag_work_harvest::harvest_steps::FIND_HARVEST;
 		}
 
 		inline void fetch_hoe(entity_t &e, ai_tag_work_harvest &h, ai_tag_my_turn_t &t, position_t &pos) {
-			work.follow_path(h, pos, e, [&h]() {
-				// Cancel
-				h.current_path.reset();
-				h.step = ai_tag_work_harvest::harvest_steps::FIND_HOE;
-				return;
-			}, [&h, &e]() {
-				// Success
-				h.current_path.reset();
-				h.step = ai_tag_work_harvest::harvest_steps::FIND_HARVEST;
-
-				inventory_system::pickup_item(h.tool_id, e.id);
-				return;
-			});
 		}
 
 		inline void find_harvest(entity_t &e, ai_tag_work_harvest &h, ai_tag_my_turn_t &t, position_t &pos) {

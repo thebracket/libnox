@@ -8,6 +8,7 @@ namespace nf {
 	namespace impl {
 		static std::vector<static_model_t> model_list;
 		static std::vector<int> dirty_list;
+		static std::vector<veg_t> veg_list;
 	}
 
 	void chunks_init() {
@@ -39,6 +40,13 @@ namespace nf {
 		region::get_chunk_models(chunk_idx, impl::model_list);
 		size = impl::model_list.size();
 		model_ptr = size > 0 ? &impl::model_list[0] : nullptr;
+	}
+
+	void chunk_veg(const int &chunk_idx, size_t &size, veg_t *& veg_ptr) {
+		impl::veg_list.clear();
+		region::get_chunk_veg(chunk_idx, impl::veg_list);
+		size = impl::veg_list.size();
+		veg_ptr = size > 0 ? &impl::veg_list[0] : nullptr;
 	}
 
 	void chunk_world_coordinates(const int &idx, int &x, int &y, int &z) {

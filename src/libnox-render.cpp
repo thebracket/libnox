@@ -25,6 +25,7 @@ namespace nf {
 	int mouse_y = 0;
 	int mouse_z = 0;
 	int selected_building = 0;
+	int selected_seed = 0;
 
 	void get_camera_position(float &x, float &y, float &z, float &zoom, bool &perspective, int &mode) {
 		x = camera_position->region_x;
@@ -171,6 +172,10 @@ namespace nf {
 			else if (game_design_mode == HARVEST) {
 				for (const auto &idx : farm_designations->harvest) {					
 					impl::cursors.emplace_back(cube_t{ idx.second.x, idx.second.y, idx.second.z, 1, 1, 1, 4 });
+				}
+				for (const auto &f : farm_designations->farms) {
+					auto[x, y, z] = idxmap(f.first);
+					impl::cursors.emplace_back(cube_t{ x, y, z, 1, 1, 1, 4 });
 				}
 			}
 		}

@@ -172,6 +172,7 @@ namespace nf {
 						}
 					}
 					ss << ")";
+					ss << " - " << region::veg_type(tile_idx);
 					lines.emplace_back(ss.str());
 				}
 			}
@@ -466,5 +467,5 @@ namespace nf {
 			[&idx](std::pair<bool, position_t> p) { return idx == mapidx(p.second); }
 		),
 			farm_designations->harvest.end());
-	}
+	}	
 }

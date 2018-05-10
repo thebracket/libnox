@@ -129,3 +129,9 @@ void read_plant_types() noexcept
         plant_defs_idx[plant_defs[i].tag] = i;
     }
 }
+
+void dump_plant_data(std::stringstream &ss) {
+	for (std::size_t i = 0; i < plant_defs.size(); ++i) {
+		ss << i << " : " << plant_defs[i].name << " \n";
+	}
+}
