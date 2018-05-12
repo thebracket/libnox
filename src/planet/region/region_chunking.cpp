@@ -73,8 +73,6 @@ namespace region {
 		switch (type) {
 		case tile_type::SOLID: return true;
 		case tile_type::WALL: return true;
-		case tile_type::TREE_LEAF: return true;
-		case tile_type::TREE_TRUNK: return true;
 		case tile_type::SEMI_MOLTEN_ROCK: return true;
 		default: return false;
 		}
@@ -193,7 +191,7 @@ namespace region {
 		if (region::stockpile_id(idx) > 0) return 3; // TODO: Determine texture
 
 													 // We no longer hard-code grass.
-		/*if (region::veg_type(idx) > 0 && !region::flag(idx, tile_flags::CONSTRUCTION)) {
+		if (region::veg_type(idx) > 0 && !region::flag(idx, tile_flags::CONSTRUCTION)) {
 			switch (region::veg_lifecycle(idx)) {
 			case 0: return 18; // Germination
 			case 1: return 21; // Sprouting
@@ -201,7 +199,7 @@ namespace region {
 			case 3: return 24; // Flowering
 			}
 			return 0; // Grass is determined to be index 0
-		}*/
+		}
 		const auto material_idx = region::material(idx);
 		const auto material = get_material(material_idx);
 		if (!material) return 3;
@@ -282,6 +280,9 @@ namespace region {
 								if (region::veg_type(ridx) > 0 && !region::flag(ridx, tile_flags::CONSTRUCTION)) {
 									chunks[chunk_idx].vegetation_models.emplace_back(std::make_tuple<int, int, int, int, int>( (int)region::veg_type(ridx), (int)region::veg_lifecycle(ridx), (int)region_x, (int)region_y, (int)region_z ));
 								}
+							}
+							else if (tiletype == tile_type::TREE_TRUNK) {
+								chunks[chunk_idx].vegetation_models.emplace_back(std::make_tuple<int, int, int, int, int>(-1, 0, (int)region_x, (int)region_y, (int)region_z));
 							}
 							else if (is_cube(tiletype))
 							{
