@@ -9,6 +9,7 @@
 #include "global_assets/game_mode.hpp"
 #include "global_assets/game_designations.hpp"
 #include "global_assets/farming_designations.hpp"
+#include "global_assets/game_mining.hpp"
 #include "nox_impl_helpers.hpp"
 #include <vector>
 
@@ -177,6 +178,24 @@ namespace nf {
 					auto[x, y, z] = idxmap(f.first);
 					impl::cursors.emplace_back(cube_t{ x, y, z, 1, 1, 1, 4 });
 				}
+			}
+			else if (game_design_mode == DIGGING) {
+				for (const auto &idx : mining_designations->mining_targets) {
+					auto[x, y, z] = idxmap(idx.first);
+					unsigned int glyph = 1;
+					switch (idx.second) {
+					case MINE_DIG: glyph = 5; break;
+					case MINE_CHANNEL: glyph = 6; break;
+					case MINE_RAMP: glyph = 7; break;
+					case MINE_STAIRS_UP: glyph = 8; break;
+					case MINE_STAIRS_DOWN: glyph = 9; break;
+					case MINE_STAIRS_UPDOWN: glyph = 10; break;
+					}
+					if (camera_position->region_z == z) impl::cursors.emplace_back(cube_t{ x, y, z, 1, 1, 1, glyph });
+				}
+			}
+			else if (game_design_mode == ARCHITECTURE) {
+
 			}
 		}
 

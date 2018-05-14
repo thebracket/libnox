@@ -126,7 +126,7 @@ namespace systems {
 			topology::run(ms);
 			visibility::run(ms);
 			vegetation::run(ms);
-			item_wear::run(ms);
+			if (day_elapsed) item_wear::run(ms);
 		}
 		inventory_system::run(ms);
 	}

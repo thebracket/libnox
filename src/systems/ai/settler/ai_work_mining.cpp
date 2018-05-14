@@ -18,6 +18,7 @@ namespace systems {
 			void evaluate_mining(job_board_t &board, entity_t &e, position_t &pos, job_evaluator_base_t *jt) {
 				const auto designation = e.component<designated_miner_t>();
 				if (!designation) return; // Not a miner - so no jobs for you!
+				if (mining_designations->mining_targets.empty()) return; // Nothing to do
 
 				board.insert(std::make_pair(10, jt));
 			}

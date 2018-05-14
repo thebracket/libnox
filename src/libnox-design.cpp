@@ -7,7 +7,9 @@
 #include "global_assets/building_designations.hpp"
 #include "global_assets/game_building.hpp"
 #include "global_assets/farming_designations.hpp"
+#include "global_assets/game_mining.hpp"
 #include "systems/helpers/inventory_assistant.hpp"
+#include "systems/ai/mining_system.hpp"
 #include "raws/buildings.hpp"
 #include "raws/defs/building_def_t.hpp"
 #include "raws/plants.hpp"
@@ -204,5 +206,45 @@ namespace nf {
 	void plant_clear() {
 		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
 		farm_designations->farms.erase(idx);
+	}
+
+	static int mine_mode = 0;
+
+	void set_mining_mode(int mode) {
+		mine_mode = mode;
+	}
+
+	int get_mining_mode() {
+		return mine_mode;
+	}
+
+	void mine_set() {
+		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
+		mining_designations->mining_targets[idx] = mine_mode;
+		systems::mining_system::mining_map_changed();
+	}
+
+	void mine_clear() {
+		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
+		mining_designations->mining_targets.erase(idx);
+		systems::mining_system::mining_map_changed();
+	}
+
+	static int architecture_mode = 0;
+
+	void set_architecture_mode(int mode) {
+		architecture_mode = mode;
+	}
+
+	int get_architecture_mode() {
+		return architecture_mode;
+	}
+
+	void architecture_set() {
+
+	}
+
+	void architecture_clear() {
+
 	}
 }
