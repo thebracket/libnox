@@ -10,6 +10,8 @@
 #include "global_assets/game_mining.hpp"
 #include "systems/helpers/inventory_assistant.hpp"
 #include "systems/ai/mining_system.hpp"
+#include "systems/ai/architecture_system.hpp"
+#include "global_assets/architecture_designations.hpp"
 #include "raws/buildings.hpp"
 #include "raws/defs/building_def_t.hpp"
 #include "raws/plants.hpp"
@@ -241,10 +243,22 @@ namespace nf {
 	}
 
 	void architecture_set() {
-
+		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
+		architecture_designations->architecture[idx] = architecture_mode;
+		systems::architecture_system::architecture_map_changed();
 	}
 
 	void architecture_clear() {
+		const auto idx = mapidx(mouse_x, mouse_y, mouse_z);
+		architecture_designations->architecture.erase(idx);
+		systems::architecture_system::architecture_map_changed();
+	}
 
+	int get_available_block_count() {
+		return 0;
+	}
+
+	int get_required_block_count() {
+		return 0;
 	}
 }

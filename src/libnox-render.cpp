@@ -10,6 +10,7 @@
 #include "global_assets/game_designations.hpp"
 #include "global_assets/farming_designations.hpp"
 #include "global_assets/game_mining.hpp"
+#include "global_assets/architecture_designations.hpp"
 #include "nox_impl_helpers.hpp"
 #include <vector>
 
@@ -195,7 +196,22 @@ namespace nf {
 				}
 			}
 			else if (game_design_mode == ARCHITECTURE) {
+				for (const auto &idx : architecture_designations->architecture) {
+					auto[x, y, z] = idxmap(idx.first);
+					unsigned int glyph = 1;
 
+					switch (idx.second) {
+					case 0: glyph = 11; break; // Wall
+					case 1: glyph = 12; break; // Floor
+					case 2: glyph = 8; break; // Up
+					case 3: glyph = 9; break; // Down
+					case 4: glyph = 10; break; // Up-Down
+					case 5: glyph = 7; break; // Ramp
+					case 6: glyph = 13; break; // Bridge
+					}
+
+					if (camera_position->region_z == z) impl::cursors.emplace_back(cube_t{ x, y, z, 1, 1, 1, glyph });
+				}
 			}
 		}
 
