@@ -4,7 +4,7 @@
 
 namespace systems {
     namespace tick {
-		const double MS_PER_TICK = config::game_config.ticks_per_ms;
+		const double MS_PER_TICK = 33.3;
         double time_count = 0.0;
         int slow_tick_count = 0;
 
