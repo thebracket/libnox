@@ -52,4 +52,8 @@ namespace nf {
 	void chunk_world_coordinates(const int &idx, int &x, int &y, int &z) {
 		region::get_chunk_coordinates(idx, x, y, z);
 	}
+
+	void chunk_design_mode(const int &chunk_idx, const int &chunk_z, size_t &size, floor_t *& floor_ptr) {
+		region::get_chunk_design_mode(chunk_idx, chunk_z, size, floor_ptr);
+	}
 }

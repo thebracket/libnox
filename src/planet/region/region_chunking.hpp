@@ -13,4 +13,5 @@ namespace region {
 	void get_chunk_veg(const int &chunk_idx, std::vector<nf::veg_t> &veg);
 	void get_chunk_coordinates(const int &idx, int &x, int &y, int &z);
 	void mark_chunk_dirty_by_tileidx(const int &idx);
+	void get_chunk_design_mode(const int &chunk_idx, const int &chunk_z, size_t &size, nf::floor_t *& floor_ptr);
 }

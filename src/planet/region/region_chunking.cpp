@@ -27,6 +27,7 @@ namespace region {
 	struct layer_t {
 		std::vector<cube_t> cubes;
 		std::vector<floor_t> floors;
+		std::vector<floor_t> design_mode;
 	};
 
 	struct chunk_t {
@@ -128,6 +129,59 @@ namespace region {
 			}
 
 			chunks[chunk_idx].layers[chunk_z].floors.emplace_back(floor_t{ tile_x, tile_y, tile_z, width, height, texture_id });
+		}
+	}
+
+	void greedy_design(std::map<int, unsigned int> &floors, const int &chunk_idx, const int &chunk_z) {
+		auto n_floors = floors.size();
+		const int base_x = chunks[chunk_idx].base_x;
+		const int base_y = chunks[chunk_idx].base_y;
+		const int base_z = chunks[chunk_idx].base_z;
+
+		while (!floors.empty()) {
+			const auto first_floor = floors.begin();
+			const auto base_region_idx = first_floor->first;
+			const auto texture_id = first_floor->second;
+
+			const auto &[tile_x, tile_y, tile_z] = idxmap(base_region_idx);
+			auto width = 1;
+			auto height = 1;
+
+			floors.erase(base_region_idx);
+			auto idx_grow_right = base_region_idx + 1;
+			auto x_coordinate = tile_x;
+			auto right_finder = floors.find(idx_grow_right);
+			while (x_coordinate < REGION_WIDTH - 1 && idx_grow_right < mapidx(std::min(REGION_WIDTH - 1, base_x + CHUNK_SIZE), tile_y, tile_z) && right_finder != floors.end() && right_finder->second == texture_id) {
+				floors.erase(idx_grow_right);
+				++width;
+				++idx_grow_right;
+				++x_coordinate;
+				right_finder = floors.find(idx_grow_right);
+			}
+
+			if (tile_y < REGION_HEIGHT - 1) {
+				auto y_progress = tile_y + 1;
+
+				auto possible = true;
+				while (possible && y_progress < base_y + CHUNK_SIZE && y_progress < REGION_HEIGHT - 1) {
+					for (auto gx = tile_x; gx < tile_x + width; ++gx) {
+						const auto candidate_idx = mapidx(gx, y_progress, tile_z);
+						const auto vfinder = floors.find(candidate_idx);
+						if (vfinder == floors.end() || vfinder->second != texture_id) possible = false;
+					}
+					if (possible) {
+						++height;
+						for (auto gx = tile_x; gx < tile_x + width; ++gx) {
+							const auto candidate_idx = mapidx(gx, y_progress, tile_z);
+							floors.erase(candidate_idx);
+						}
+					}
+
+					++y_progress;
+				}
+			}
+
+			chunks[chunk_idx].layers[chunk_z].design_mode.emplace_back(floor_t{ tile_x, tile_y, tile_z, width, height, texture_id });
 		}
 	}
 
@@ -241,10 +295,21 @@ namespace region {
 		return use_id;
 	}
 
+	unsigned int get_design_tex(const int &idx) {
+		const auto tt = region::tile_type(idx);
+
+		// Default graphics for open space and not-yet-revealed
+		if (tt == tile_type::OPEN_SPACE) return 3;
+		if (!region::flag(idx, tile_flags::REVEALED)) return 3;
+		if (tt == tile_type::FLOOR) return get_floor_tex(idx);
+		return get_cube_tex(idx);
+	}
+
 	void update_chunk(const int &chunk_idx) {
 		for (auto &layer : chunks[chunk_idx].layers) {
 			layer.cubes.clear();
 			layer.floors.clear();
+			layer.design_mode.clear();
 		}
 		chunks[chunk_idx].static_voxel_models.clear();
 		chunks[chunk_idx].vegetation_models.clear();
@@ -258,6 +323,7 @@ namespace region {
 			const int region_z = chunk_z + base_z;
 			std::map<int, unsigned int> floors;
 			std::map<int, unsigned int> cubes;
+			std::map<int, unsigned int> design_mode;
 
 			for (int chunk_y = 0; chunk_y < CHUNK_SIZE; ++chunk_y) {
 				const int region_y = chunk_y + base_y;
@@ -266,6 +332,7 @@ namespace region {
 					const int ridx = mapidx(region_x, region_y, region_z);
 
 					const auto tiletype = region::tile_type(ridx);
+					design_mode.insert(std::make_pair(ridx, get_design_tex(ridx)));
 					if (tiletype != tile_type::OPEN_SPACE) {
 						if (region::flag(ridx, tile_flags::REVEALED)) {
 							if (tiletype == tile_type::WINDOW) {
@@ -335,6 +402,7 @@ namespace region {
 
 			greedy_floors(floors, chunk_idx, chunk_z);
 			greedy_cubes(cubes, chunk_idx, chunk_z);
+			greedy_design(design_mode, chunk_idx, chunk_z);
 		}
 	}
 
@@ -388,5 +456,10 @@ namespace region {
 		for (const auto &v : chunks[chunk_idx].vegetation_models) {
 			veg.emplace_back(nf::veg_t{ std::get<0>(v), std::get<1>(v), std::get<2>(v), std::get<3>(v), std::get<4>(v) });
 		}
+	}
+
+	void get_chunk_design_mode(const int &chunk_idx, const int &chunk_z, size_t &size, nf::floor_t *& floor_ptr) {
+		size = chunks[chunk_idx].layers[chunk_z].design_mode.size();
+		floor_ptr = size > 0 ? &chunks[chunk_idx].layers[chunk_z].design_mode[0] : nullptr;
 	}
 }
