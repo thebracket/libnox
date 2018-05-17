@@ -302,6 +302,7 @@ namespace region {
 		if (tt == tile_type::OPEN_SPACE) return 3;
 		if (!region::flag(idx, tile_flags::REVEALED)) return 3;
 		if (tt == tile_type::FLOOR) return get_floor_tex(idx);
+		if (tt == tile_type::TREE_TRUNK) return 6;
 		return get_cube_tex(idx);
 	}
 
