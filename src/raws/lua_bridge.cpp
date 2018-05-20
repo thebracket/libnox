@@ -1,5 +1,6 @@
 #include "lua_bridge.hpp"
 #include "../utils/system_log.hpp"
+#include <iostream>
 
 lua_State* lua_state;
 
@@ -29,6 +30,7 @@ void load_lua_script(const std::string filename) {
 	//std::cout << "Executing LUA: " << filename << "\n";
 	if (luaL_loadfile(lua_state, filename.c_str())  || lua_pcall(lua_state, 0, 0, 0) ) {
 		//glog(log_target::LOADER, log_severity::error, "Lua error ({0}): {1}", filename, lua_tostring(lua_state, -1));
+		std::cout << "Lua Error: " << filename << " - " << lua_tostring(lua_state, -1) << "\n";
 	}
 }
 

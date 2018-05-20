@@ -18,6 +18,7 @@
 #include "global_assets/game_mining.hpp"
 #include "global_assets/game_pause.hpp"
 #include "planet/region/region.hpp"
+#include "raws/materials.hpp"
 #include <string>
 
 
@@ -93,5 +94,22 @@ namespace nf {
 
 	bool is_world_loadable() {
 		return exists(save_filename());
+	}
+
+	namespace impl {
+		std::vector<material_map_t> matmap;
+	}
+
+	void get_materials_map(size_t &size, material_map_t *& mat_ptr) {
+		impl::matmap.clear();
+		impl::matmap.resize(texture_atlas.size() + 1);
+		for (const auto &t : texture_atlas) {
+			material_map_t mm;
+			strncpy_s(mm.UnrealPath, t.second.c_str(), 254);
+			impl::matmap[t.first] = mm;
+		}
+
+		size = impl::matmap.size();
+		mat_ptr = &impl::matmap[0];
 	}
 }

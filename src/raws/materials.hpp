@@ -2,6 +2,7 @@
 
 #include "reaction_input.hpp"
 #include "graphviz.hpp"
+#include <map>
 
 struct material_def_t;
 struct graphviz_t;
@@ -49,3 +50,5 @@ void build_material_acquisition_tech_tree(graphviz_t * tree);
 
 void read_material_textures() noexcept;
 void read_voxel_models() noexcept;
+
+extern std::map<int, std::string> texture_atlas;

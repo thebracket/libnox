@@ -13,6 +13,7 @@ boost::container::flat_map<std::string, std::size_t> material_defs_idx;
 std::vector<material_def_t> material_defs;
 std::vector<std::string> material_textures;
 std::vector<std::pair<std::string, std::string>> voxel_models_to_load;
+std::map<int, std::string> texture_atlas;
 
 /*
  * Retrieve a material by ID
@@ -171,11 +172,10 @@ void read_material_types() noexcept
             }
             if (field == "damage_bonus") m.damage_bonus = static_cast<int>(lua_tonumber(lua_state, -1));
             if (field == "ac_bonus") m.ac_bonus = static_cast<float>(lua_tonumber(lua_state, -1));
-            if (field == "texture") m.base_texture_id = static_cast<int>(lua_tonumber(lua_state, -1));
-            if (field == "constructed") m.constructed_texture_id = static_cast<int>(lua_tonumber(lua_state, -1));
-			if (field == "floor") m.floor_texture_id = static_cast<int>(lua_tonumber(lua_state, -1));
-			if (field == "floor_constructed") m.constructed_floor_texture_id = static_cast<int>(lua_tonumber(lua_state, -1));
-
+			if (field == "FloorRough") m.floor_rough = lua_tostring(lua_state, -1);
+			if (field == "FloorSmooth") m.floor_smooth = lua_tostring(lua_state, -1);
+			if (field == "WallRough") m.wall_rough = lua_tostring(lua_state, -1);
+			if (field == "WallSmooth") m.wall_smooth = lua_tostring(lua_state, -1);
             lua_pop(lua_state, 1);
         }
         material_defs.push_back(m);
@@ -186,9 +186,24 @@ void read_material_types() noexcept
     std::sort(material_defs.begin(), material_defs.end(), [] (material_def_t a, material_def_t b) {
         return a.tag < b.tag;
     });
-for (std::size_t material_index = 0; material_index < material_defs.size(); ++material_index) {
-	material_defs_idx[material_defs[material_index].tag] = material_index;
-}
+	texture_atlas.clear();
+	int next_id = 0;
+	for (std::size_t material_index = 0; material_index < material_defs.size(); ++material_index) {
+		material_defs_idx[material_defs[material_index].tag] = material_index;
+
+		material_defs[material_index].floor_rough_id = next_id;
+		material_defs[material_index].floor_smooth_id = next_id + 1;
+		material_defs[material_index].wall_rough_id = next_id + 2;
+		material_defs[material_index].wall_smooth_id = next_id + 3;
+
+		texture_atlas[next_id] = material_defs[material_index].floor_rough;
+		texture_atlas[next_id + 1] = material_defs[material_index].floor_smooth;
+		texture_atlas[next_id + 2] = material_defs[material_index].wall_rough;
+		texture_atlas[next_id + 3] = material_defs[material_index].wall_smooth;
+
+		next_id += 4;
+	}
+
 }
 
 void build_material_acquisition_tech_tree(graphviz_t *tree) {

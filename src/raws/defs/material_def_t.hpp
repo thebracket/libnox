@@ -22,8 +22,12 @@ struct material_def_t {
     std::vector<std::string> ore_materials;
     int damage_bonus = 0;
     float ac_bonus = 0.0F;
-    int base_texture_id = 2;
-    int constructed_texture_id = 2;
-	int floor_texture_id = 2;
-	int constructed_floor_texture_id = 2;
+	std::string floor_rough;
+	std::string floor_smooth;
+	std::string wall_rough;
+	std::string wall_smooth;
+	int floor_rough_id;
+	int floor_smooth_id;
+	int wall_rough_id;
+	int wall_smooth_id;
 };

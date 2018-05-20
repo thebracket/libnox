@@ -5,6 +5,8 @@
 #include "../src/raws/plants.hpp"
 
 int main() {
+	nf::set_game_def_path("c:/Users/Herbert/Documents/Unreal Projects/NoxUnreal/Content/");
+
 	std::cout << "Loading the planet...\n";
 	nf::setup_planet();
 
@@ -16,6 +18,15 @@ int main() {
 
 	std::cout << "Loading the game\n";
 	nf::load_game();
+
+	size_t sz;
+	nf::material_map_t * ptr;
+	nf::get_materials_map(sz, ptr);
+	std::cout << "Mapped " << sz << " textures.\n";
+	for (size_t i = 0; i < sz; ++i) {
+		nf::material_map_t m = ptr[i];
+		std::cout << m.UnrealPath << "\n";
+	}
 
 	std::cout << "Initializing chunks\n";
 	nf::chunks_init();

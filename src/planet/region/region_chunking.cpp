@@ -260,10 +260,10 @@ namespace region {
 
 		unsigned int use_id = 3;
 		if (region::flag(idx, tile_flags::CONSTRUCTION)) {
-			use_id = (unsigned int)material->constructed_floor_texture_id;
+			use_id = (unsigned int)material->floor_smooth_id;
 		}
 		else {
-			use_id = (unsigned int)material->floor_texture_id;
+			use_id = (unsigned int)material->floor_rough_id;
 		}
 		if (use_id == 3) {
 			//glog(log_target::LOADER, log_severity::warning, "Material [{0}] is lacking a texture", material->name);
@@ -284,10 +284,10 @@ namespace region {
 
 		unsigned int use_id = 3;
 		if (!region::flag(idx, tile_flags::CONSTRUCTION)) {
-			use_id = (unsigned int)material->constructed_texture_id;
+			use_id = (unsigned int)material->wall_smooth_id;
 		}
 		else {
-			use_id = (unsigned int)material->base_texture_id;
+			use_id = (unsigned int)material->wall_rough_id;
 		}
 		if (use_id == 3) {
 			//glog(log_target::LOADER, log_severity::warning, "Material [{0}] is lacking a texture.", material->name);

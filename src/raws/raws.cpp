@@ -86,6 +86,7 @@ void load_raws() noexcept {
 	load_string_table(-1, raws_path + std::string("index.txt"));
 	for (const auto &filename : string_table(-1)->strings) {
 		load_lua_script(raws_path + filename);
+		std::cout << raws_path << filename << "\n";
 	}
 	//std::cout << "Loading tables\n";
 
