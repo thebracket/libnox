@@ -351,6 +351,7 @@ namespace region {
 							}
 							else if (tiletype == tile_type::TREE_TRUNK) {
 								chunks[chunk_idx].vegetation_models.emplace_back(std::make_tuple<int, int, int, int, int>(-1, 0, (int)region_x, (int)region_y, (int)region_z));
+								floors.insert(std::make_pair(ridx, -1));
 							}
 							else if (is_cube(tiletype))
 							{
