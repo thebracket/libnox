@@ -337,7 +337,7 @@ namespace region {
 					if (tiletype != tile_type::OPEN_SPACE) {
 						if (region::flag(ridx, tile_flags::REVEALED)) {
 							if (tiletype == tile_type::WINDOW) {
-								cubes.insert(std::make_pair(ridx, 15));
+								cubes.insert(std::make_pair(ridx, -3));
 							}
 							else if (tiletype == tile_type::FLOOR) {
 								floors.insert(std::make_pair(ridx, get_floor_tex(ridx)));
