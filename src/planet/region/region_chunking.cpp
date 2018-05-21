@@ -249,16 +249,16 @@ namespace region {
 			switch (region::veg_lifecycle(idx)) {
 			case 0: return 18; // Germination
 			case 1: return 21; // Sprouting
-			case 2: return 0; // Growing (grass is material 0)
+			case 2: return -1; // Growing (grass is material 0)
 			case 3: return 24; // Flowering
 			}
-			return 0; // Grass is determined to be index 0
+			return -1; // Grass is determined to be index -1
 		}
 		const auto material_idx = region::material(idx);
 		const auto material = get_material(material_idx);
-		if (!material) return 3;
+		if (!material) return -2; // -2 is the super-obvious "we don't have a material" texture.
 
-		unsigned int use_id = 3;
+		unsigned int use_id = -2;
 		if (region::flag(idx, tile_flags::CONSTRUCTION)) {
 			use_id = (unsigned int)material->floor_smooth_id;
 		}
@@ -280,16 +280,16 @@ namespace region {
 
 		const auto material_idx = region::material(idx);
 		const auto material = get_material(material_idx);
-		if (!material) return 3;
+		if (!material) return -2;
 
-		unsigned int use_id = 3;
+		unsigned int use_id = -2;
 		if (!region::flag(idx, tile_flags::CONSTRUCTION)) {
 			use_id = (unsigned int)material->wall_smooth_id;
 		}
 		else {
 			use_id = (unsigned int)material->wall_rough_id;
 		}
-		if (use_id == 3) {
+		if (use_id == -2) {
 			//glog(log_target::LOADER, log_severity::warning, "Material [{0}] is lacking a texture.", material->name);
 		}
 		return use_id;
